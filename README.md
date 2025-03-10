@@ -66,10 +66,5 @@ Elle permet à plusieurs types d’utilisateurs d’interagir :
 
 ---
 
-## 🤝 **Contributions**  
-Les contributions sont les bienvenues ! Consultez le fichier `CONTRIBUTING.md` pour en savoir plus.  
-
----
-
 ## 📜 **Licence**  
 Ce projet est sous licence MIT.  
