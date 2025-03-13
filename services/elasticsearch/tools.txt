@@ -1,0 +1,2 @@
+Technologies : Elasticsearch (ex: elasticsearch:7.17)
+Rôle : Moteur de recherche full-text pour indexer restaurants, plats, menus.

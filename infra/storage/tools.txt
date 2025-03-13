@@ -1,0 +1,2 @@
+Technologies : MinIO ou AWS S3
+Rôle : Stockage des images, documents et autres assets.

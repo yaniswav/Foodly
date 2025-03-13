@@ -1,0 +1,2 @@
+Technologies : Docker Compose, CI/CD (GitHub Actions, GitLab CI)
+Rôle : Déploiement local et orchestration CI/CD.

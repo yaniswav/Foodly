@@ -1,0 +1,2 @@
+Technologies : Next.js / Remix, React
+Rôle : Interface web pour les clients, restaurateurs, livreurs (PWA, SSR, etc.).

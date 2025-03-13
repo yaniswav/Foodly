@@ -1,0 +1,2 @@
+Technologies : Node.js, Socket.io / WebSocket, Redis PubSub
+Rôle : Communication temps réel (suivi de commande, notifications en live).

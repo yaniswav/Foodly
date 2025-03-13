@@ -1,0 +1,2 @@
+Technologies : Capacitor.js / Ionic, React Native
+Rôle : Application mobile pour clients et livreurs, intégrant des fonctionnalités GPS et notifications.

@@ -1,0 +1,2 @@
+Technologies : JSON, YAML, JavaScript
+Rôle : Fichiers de configuration globaux pour tous les services.

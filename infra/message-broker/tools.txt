@@ -1,0 +1,2 @@
+Technologies : RabbitMQ ou Redis Streams
+Rôle : Système de messagerie pour la communication asynchrone entre services.

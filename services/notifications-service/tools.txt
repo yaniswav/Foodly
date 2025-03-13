@@ -1,0 +1,2 @@
+Technologies : Node.js, FCM / APNS, Web Push API
+Rôle : Envoi de notifications push et pop-up aux utilisateurs (hors e-mail).

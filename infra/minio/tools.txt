@@ -1,0 +1,2 @@
+Technologies : MinIO (ex: minio/minio:latest)
+Rôle : Conteneur optionnel pour un stockage S3 self-hosted des assets (images, documents, etc.).

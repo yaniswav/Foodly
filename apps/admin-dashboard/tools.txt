@@ -1,0 +1,2 @@
+Technologies : Next.js / React, Metabase (optionnel)
+Rôle : Interface d'administration pour le service commercial et technique (stats, logs, monitoring).

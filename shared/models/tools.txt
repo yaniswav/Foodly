@@ -1,0 +1,2 @@
+Technologies : TypeScript, JSON Schema
+Rôle : Schémas et modèles de données partagés.

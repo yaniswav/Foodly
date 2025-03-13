@@ -1,0 +1,2 @@
+Technologies : Node.js, TypeScript
+Rôle : Utilitaires et fonctions communes partagées entre microservices.

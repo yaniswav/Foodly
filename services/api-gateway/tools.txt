@@ -1,0 +1,2 @@
+Technologies : NestJS / Express.js, OpenAPI
+Rôle : Point d'entrée unique, routage, validation des tokens et agrégation d’API.

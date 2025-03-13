@@ -1,0 +1,2 @@
+Technologies : Node.js, NestJS
+Rôle : Gestion des livreurs et suivi des livraisons.

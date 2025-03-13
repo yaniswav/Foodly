@@ -1,0 +1,2 @@
+Technologies : GitHub Actions, GitLab CI, Jenkins (optionnel)
+Rôle : Pipelines d’automatisation pour build, tests et déploiement.

@@ -1,0 +1,2 @@
+Technologies : Traefik, Nginx
+Rôle : Reverse proxy pour router les requêtes externes, gestion SSL, load balancing.

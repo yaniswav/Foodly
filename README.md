@@ -1,70 +1,69 @@
-# **Foodly - Plateforme de livraison de repas**  
+# Plateforme de Restauration en Ligne
 
-## 📌 **Description**  
-**Foodly** est une plateforme logicielle distribuée visant à moderniser et optimiser la livraison de repas en ligne. Conçue dans le cadre d'un projet d'ingénierie, cette application propose une architecture évolutive combinant microservices, middleware et intégration d'API tierces.  
+## Introduction
 
-Elle permet à plusieurs types d’utilisateurs d’interagir :  
-- **Clients** : Commander des repas, suivre leurs livraisons, et gérer leurs comptes.  
-- **Restaurateurs** : Ajouter et gérer leur offre commerciale.  
-- **Livreurs** : Accepter des courses et valider les livraisons.  
-- **Développeurs tiers** : Intégrer des services via API.  
-- **Services commerciaux & techniques** : Assurer la gestion et la maintenance de la plateforme.  
+Ce projet est une initiative ambitieuse visant à révolutionner le secteur de la restauration en ligne. La plateforme a pour objectif de rassembler et de traiter les offres commerciales du domaine de la restauration afin de fournir une expérience personnalisée à plusieurs profils d'utilisateurs :
+- Clients finaux (commande et suivi des livraisons)
+- Restaurateurs (gestion de menus et statistiques)
+- Livreurs (gestion et suivi des courses)
+- Développeurs tiers (intégration d'API et composants réutilisables)
+- Service commercial et technique (supervision, reporting, déploiement)
 
----
+## Description du Projet
 
-## 🚀 **Technologies utilisées**  
-### **Frontend**  
-- React / Next.js  
-- TailwindCSS pour le design  
-- WebSockets pour le suivi des livraisons en temps réel  
+La solution repose sur une architecture hybride combinant les principes du SOA/ESB et des microservices. Les communications entre services se font de manière sécurisée et asynchrone, avec une conteneurisation via Docker et une orchestration possible avec Kubernetes pour la scalabilité.
 
-### **Backend**  
-- Node.js avec Express  
-- API RESTful avec authentification JWT  
-- WebSockets pour la communication en temps réel  
+## Structure du Monorepo
 
-### **Base de données**  
-- MongoDB (NoSQL) pour les commandes et profils utilisateurs  
-- PostgreSQL pour les statistiques et la gestion des transactions  
+La structure du dépôt est organisée de la manière suivante :
 
-### **Infrastructure & Déploiement**  
-- **Docker** pour la conteneurisation  
-- **Kubernetes** pour l’orchestration des microservices  
-- **CI/CD** avec GitHub Actions  
-- **Scalabilité** assurée par un load balancer et un proxy intelligent  
+- **apps/**
+    - **web/** : Interface web (Next.js/Remix, React) pour les clients, restaurateurs et livreurs (PWA).
+    - **mobile/** : Application mobile (Capacitor.js/Ionic, React Native) pour la gestion mobile et le suivi des livraisons.
+    - **admin-dashboard/** : Interface d'administration (Next.js/React, Metabase en option) pour le suivi des performances, statistiques et gestion des comptes.
 
-### **Sécurité & Gestion des accès**  
-- **OAuth2 / JWT** pour l’authentification  
-- **Chiffrement des données sensibles**  
-- **Surveillance des performances** (logs, monitoring des microservices)  
+- **services/**
+    - **api-gateway/** : Point d'entrée unique, gestion de l'authentification, du routage et de la documentation (NestJS/Express.js, OpenAPI).
+    - **auth-service/** : Service d'authentification et gestion des tokens (Keycloak/Auth0, JWT).
+    - **orders-service/** : Gestion des commandes (création, modification, paiement, suivi, historique).
+    - **users-service/** : Gestion des comptes et rôles des différents utilisateurs (clients, restaurateurs, livreurs, etc.).
+    - **restaurants-service/** : Gestion des menus, articles et promotions pour les restaurateurs.
+    - **delivery-service/** : Gestion des livreurs et suivi des livraisons.
+    - **notifications-service/** : Envoi de notifications push et pop-up (FCM, Web Push API).
+    - **websockets-service/** : Communication temps réel via WebSocket (Socket.io, Redis PubSub).
+    - **worker-service/** : Exécution des tâches asynchrones en arrière-plan (BullMQ, Redis ou RabbitMQ).
+    - **elasticsearch/** (Optionnel) : Moteur de recherche full-text pour indexer et rechercher les restaurants, plats et menus.
+    - **analytics-service/** (Optionnel) : Dashboard analytique pour le suivi des commandes et statistiques commerciales (Metabase, Superset).
 
----
+- **infra/**
+    - **database/**
+        - **postgresql/** : Base de données SQL pour les transactions complexes et le reporting.
+        - **mongodb/** : Base de données NoSQL pour le stockage des données métiers (comptes, commandes, etc.).
+    - **message-broker/** : Système de messagerie asynchrone (RabbitMQ ou Redis Streams).
+    - **proxy-loadbalancer/** : Reverse proxy et load balancing (Traefik ou Nginx).
+    - **monitoring/** : Supervision et collecte des métriques (Prometheus, Grafana).
+    - **storage/** : Stockage des images, documents et autres assets (MinIO ou AWS S3).
+    - **minio/** (Optionnel) : Conteneur dédié pour un stockage S3 self-hosted (MinIO).
 
-## 📂 **Organisation du projet**  
-- `/frontend` → Code source du client web  
-- `/backend` → Microservices pour la gestion des utilisateurs, commandes et paiements  
-- `/api` → Documentation des endpoints REST  
-- `/deploy` → Fichiers Docker et scripts Kubernetes  
+- **deployment/**
+    - **k8s/** : Fichiers de configuration Kubernetes et Helm Charts pour le déploiement en production (optionnel).
+    - **docker-compose.yml** : Déploiement local rapide avec Docker Compose.
+    - **ci-cd/** : Pipelines d'intégration continue et de déploiement (GitHub Actions, GitLab CI, etc.).
 
----
+- **shared/**
+    - **common/** : Utilitaires et fonctions partagées entre les services.
+    - **models/** : Schémas et modèles de données communs (TypeScript, JSON Schema).
+    - **configs/** : Fichiers de configuration globaux.
 
-## 🔧 **Installation et exécution locale**  
-1. **Cloner le projet**  
-   ```sh
-   git clone https://github.com/username/Foodly.git
-   cd Foodly
-   ```
+## Technologies Utilisées
 
-2. **Lancer les services avec Docker Compose**  
-   ```sh
-   docker-compose up --build
-   ```
-
-3. **Accéder à l’application**  
-   - Frontend : `http://localhost:3000`  
-   - API : `http://localhost:5000/api`  
-
----
-
-## 📜 **Licence**  
-Ce projet est sous licence MIT.  
+- **Front-end** : Next.js, React, Remix, Capacitor.js, Ionic, React Native
+- **Back-end** : Node.js, NestJS, Express.js
+- **Authentification** : Keycloak, Auth0, JWT
+- **Bases de données** : MongoDB, PostgreSQL
+- **Messagerie asynchrone** : RabbitMQ, Redis Streams
+- **Conteneurisation** : Docker, Docker Compose
+- **Orchestration** : Kubernetes (optionnel)
+- **Monitoring** : Prometheus, Grafana
+- **Stockage** : MinIO, AWS S3
+- **Optionnels** : Elasticsearch pour la recherche et Analytics Service pour le dashboard commercial

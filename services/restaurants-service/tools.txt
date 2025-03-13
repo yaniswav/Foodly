@@ -1,0 +1,2 @@
+Technologies : Node.js, NestJS
+Rôle : Gestion des menus, articles et promotions pour les restaurateurs.

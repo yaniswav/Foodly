@@ -1,0 +1,2 @@
+Technologies : Node.js, NestJS
+Rôle : Gestion des comptes utilisateurs et des rôles (clients, restaurateurs, livreurs, etc.).
