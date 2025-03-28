@@ -1,2 +1,0 @@
-Technologies : Node.js, BullMQ, Redis ou RabbitMQ
-Rôle : Exécution de tâches asynchrones et en arrière-plan (emails, batch processing, etc.).

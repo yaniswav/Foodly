@@ -1,0 +1,30 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: gateway
+    volumes:
+      - ./api-gateway/nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - orders
+      - auth
+      # Ajouter le nom des nouveaux services ici + créer le service en dessus
+
+  auth:
+    build: auth-service
+    container_name: auth-service
+    networks:
+      - app-network
+
+  orders:
+    build: orders-service
+    container_name: orders-service
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

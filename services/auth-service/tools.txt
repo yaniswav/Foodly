@@ -1,2 +1,0 @@
-Technologies : Keycloak / Auth0, JWT
-Rôle : Gestion de l'authentification et des tokens d'accès (OAuth2, OpenID Connect).

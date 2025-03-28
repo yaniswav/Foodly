@@ -1,2 +1,0 @@
-Technologies : Metabase / Superset
-Rôle : Dashboard analytique pour le service commercial (suivi des commandes, CA, statistiques).
