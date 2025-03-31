@@ -41,8 +41,8 @@ exports.login = (req, res) => {
 
   const user = User_DB.find((u) => u.username === username && bcrypt.compareSync(password, u.password));
   if (user) {
-    const accessToken = jwt.sign({ username: user.username, exp: Math.floor(Date.now() / 1000) + 120 }, process.env.ACCESS_JWT_KEY);
-    const refreshToken = jwt.sign({ username: user.username, exp: Math.floor(Date.now() / 1000) + 360 }, process.env.REFRESH_JWT_KEY);
+    const accessToken = jwt.sign({ username: user.username, exp: Math.floor(Date.now() / 1000) + 60 * 120 }, process.env.ACCESS_JWT_KEY);
+    const refreshToken = jwt.sign({ username: user.username, exp: Math.floor(Date.now() / 1000) + 60 * 240 }, process.env.REFRESH_JWT_KEY);
     user.refresh_token = refreshToken;
     res.cookie('access_token', accessToken, {
       httpOnly: true,

@@ -10,6 +10,10 @@ app.use(express.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 
+app.options('', function (req, res) {
+  res.status(200).json({ msg: "Welcome on auth service" });
+});
+
 require('./src/routes/auth.routes')(app);
 
 app.listen(PORT, () => {

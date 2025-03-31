@@ -25,6 +25,12 @@ services:
     networks:
       - app-network
 
+  logs:
+    build: logs-service
+    container_name: logs-service
+    networks:
+      - app-network
+
 networks:
   app-network:
     driver: bridge

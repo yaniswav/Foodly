@@ -8,7 +8,7 @@ const port = 3000
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.get('/', function (req, res) {
+app.options('', function (req, res) {
   res.status(200).json({ msg: "Welcome on order service" });
 });
 
