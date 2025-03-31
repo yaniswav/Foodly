@@ -12,7 +12,7 @@ app.get('/', function (req, res) {
   res.status(200).json({ msg: "Welcome on order service" });
 });
 
-require('./src/routes/auth.routes')(app);
+require('./src/routes/orders.routes')(app);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
