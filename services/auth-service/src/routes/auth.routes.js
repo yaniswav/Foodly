@@ -7,13 +7,41 @@ module.exports = function(app) {
   app.post("/refresh", authController.refresh);
 };
 
+
 /**
- * @api {post} /auth/login Request Login 
- * @apiName GetUser
- * @apiGroup User
- *
- * @apiParam {Number} id User's unique ID.
- *
- * @apiSuccess {String} firstname Firstname of the User.
- * @apiSuccess {String} lastname  Lastname of the User.
+ * @api {post} /register Register User
+ * @apiName Register
+ * @apiGroup Auth
+ * @apiDescription Register a new user with the provided details.
+ * 
+ * @apiParam {String} username User's username.
+ * @apiParam {String} password User's password.
+ * 
+ * @apiSuccess {String} message Registration successful message.
+ * @apiError {String} error Error message.
+ */
+
+/**
+ * @api {post} /login Login User
+ * @apiName Login
+ * @apiGroup Auth
+ * @apiDescription Log in a user with the provided credentials.
+ * 
+ * @apiParam {String} username User's username.
+ * @apiParam {String} password User's password.
+ * 
+ * @apiSuccess {String} token Authentication token.
+ * @apiError {String} error Error message.
+ */
+
+/**
+ * @api {post} /refresh Refresh Token
+ * @apiName Refresh
+ * @apiGroup Auth
+ * @apiDescription Refresh the authentication token.
+ * 
+ * @apiParam {String} token Current authentication token.
+ * 
+ * @apiSuccess {String} token New authentication token.
+ * @apiError {String} error Error message.
  */
