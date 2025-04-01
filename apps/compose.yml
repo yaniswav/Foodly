@@ -4,7 +4,7 @@ services :
     build : web
     container_name: webserver
     ports:
-      - "3000:3000"
+      - "80:80"
     networks:
       - app-network
 
