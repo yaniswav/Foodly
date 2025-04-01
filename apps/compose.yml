@@ -1,1 +1,11 @@
 #fichier docker-compose
+services :
+  webserver:
+    build : web
+    container_name: webserver
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
