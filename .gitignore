@@ -5,8 +5,3 @@ logs/
 *.log
 # Environment variables
 .env
-!/services/auth-service/.env
-
-!/services/logs-service/.env
-
-!/services/orders-service/.env
