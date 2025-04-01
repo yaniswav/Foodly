@@ -15,6 +15,11 @@ jobs:
       - name: Checkout du repo
         uses: actions/checkout@v4
 
+      - name: Afficher l'IP publique du runner
+        run: |
+          echo "IP publique du runner GitHub :"
+          curl https://api.ipify.org
+
       - name: Configuration SSH
         run: |
           mkdir -p ~/.ssh
