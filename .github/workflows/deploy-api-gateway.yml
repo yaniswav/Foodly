@@ -18,13 +18,13 @@ jobs:
       - name: Configuration SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H bubux.tlk.biz >> ~/.ssh/known_hosts
 
       - name: Déploiement sur le serveur
         run: |
-          ssh -i ~/.ssh/id_rsa githubactions@bubux.tlk.biz << 'EOF'
+          ssh -i ~/.ssh/id_rsa github-actions@bubux.tlk.biz << 'EOF'
             cd /opt/Foodly
             git pull origin main
             cd deployment
