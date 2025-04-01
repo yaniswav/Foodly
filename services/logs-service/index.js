@@ -1,7 +1,7 @@
 require('./src/middlewares/mongo-connexion').main().catch(err => console.log(err));
 const express = require('express');
-const app = express()
-const port = 3000
+const app = express();
+const port = 3000;
 
 // Express middleware
 
