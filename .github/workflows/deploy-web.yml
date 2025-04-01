@@ -1,0 +1,32 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "apps/web/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout du repo
+        uses: actions/checkout@v4
+
+      - name: Configuration SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H bubux.tlk.biz >> ~/.ssh/known_hosts
+
+      - name: Déploiement sur le serveur
+        run: |
+          ssh -i ~/.ssh/id_rsa githubactions@bubux.tlk.biz << 'EOF'
+            cd /opt/Foodly
+            git pull origin main
+            cd deployment
+            docker-compose up -d --build web
+          EOF
