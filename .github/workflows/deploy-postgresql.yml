@@ -1,0 +1,27 @@
+name: Manual Deploy PostgreSQL
+
+on:
+  workflow_dispatch:  # Déclenchement manuel uniquement
+
+jobs:
+  deploy_postgres:
+    runs-on: ubuntu-latest
+
+    # On injecte ici les secrets GitHub dans l'environnement du runner
+    env:
+      POSTGRESQL_DATABASE: ${{ secrets.POSTGRESQL_DATABASE }}
+      POSTGRESQL_USERNAME: ${{ secrets.POSTGRESQL_USERNAME }}
+      POSTGRESQL_PASSWORD: ${{ secrets.POSTGRESQL_PASSWORD }}
+      POSTGRESQL_ENABLE_TLS: ${{ secrets.POSTGRESQL_ENABLE_TLS }}
+      POSTGRESQL_TLS_CERT_FILE: ${{ secrets.POSTGRESQL_TLS_CERT_FILE }}
+      POSTGRESQL_TLS_KEY_FILE: ${{ secrets.POSTGRESQL_TLS_KEY_FILE }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Start PostgreSQL container
+        run: docker-compose up -d postgresql

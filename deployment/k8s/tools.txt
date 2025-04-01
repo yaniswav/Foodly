@@ -1,2 +1,0 @@
-Technologies : Kubernetes, Helm Charts
-Rôle : Orchestration et déploiement des conteneurs en production.

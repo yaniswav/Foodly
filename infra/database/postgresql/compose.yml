@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  postgresql:
+    image: bitnami/postgresql:16
+    container_name: postgresql
+    restart: always
+
+    environment:
+      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE}
+      - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME}
+      - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
+      - POSTGRESQL_ENABLE_TLS=${POSTGRESQL_ENABLE_TLS}
+      - POSTGRESQL_TLS_CERT_FILE=${POSTGRESQL_TLS_CERT_FILE}
+      - POSTGRESQL_TLS_KEY_FILE=${POSTGRESQL_TLS_KEY_FILE}
+      # Tu peux aussi rajouter les lignes suivantes si besoin :
+      # - POSTGRESQL_TLS_CA_FILE=${POSTGRESQL_TLS_CA_FILE}
+      # - POSTGRESQL_TLS_CRL_FILE=${POSTGRESQL_TLS_CRL_FILE}
+      # - POSTGRESQL_TLS_PREFER_SERVER_CIPHERS=${POSTGRESQL_TLS_PREFER_SERVER_CIPHERS}
+
+    volumes:
+      - postgres_data:/bitnami/postgresql
+      - ./certs:/certs
+
+    ports:
+      - "5432:5432"
+
+    networks:
+      - database_network
+
+networks:
+  database_network:
+    external: true
+
+volumes:
+  postgres_data:
