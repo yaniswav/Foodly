@@ -11,7 +11,8 @@ services:
     depends_on:
       - orders
       - auth
-      # Ajouter le nom des nouveaux services ici + créer le service en dessus
+      - logs
+      - users
 
   auth:
     build: auth-service
@@ -28,6 +29,12 @@ services:
   logs:
     build: logs-service
     container_name: logs-service
+    networks:
+      - app-network
+
+  users:
+    build: users-service
+    container_name: users-service
     networks:
       - app-network
 
