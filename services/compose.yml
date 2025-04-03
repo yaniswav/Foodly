@@ -13,6 +13,7 @@ services:
       - auth
       - logs
       - users
+      - restaurants
 
   auth:
     build: auth-service
@@ -35,6 +36,12 @@ services:
   users:
     build: users-service
     container_name: users-service
+    networks:
+      - app-network
+
+  restaurants:
+    build: restaurants-service
+    container_name: restaurants-service
     networks:
       - app-network
 
