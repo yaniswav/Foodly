@@ -3,7 +3,7 @@ module.exports = (requiredFields) => {
         const missingFields = [];
 
         requiredFields.forEach((field) => {
-            if (!req.body[field]) {
+            if (!req.body[field] && req.body[field] !== 0) {
                 missingFields.push(field);
             }
         });

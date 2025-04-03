@@ -3,7 +3,7 @@ module.exports = (requiredArgs) => {
         const missingArgs = [];
 
         requiredArgs.forEach((arg) => {
-            if (!req.query[arg]) {
+            if (!req.query[arg] && req.query[arg] !== 0) {
                 missingArgs.push(arg);
             }
         });
