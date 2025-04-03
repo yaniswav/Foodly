@@ -23,24 +23,24 @@ export default function Header() {
                 initial={{ y: -80 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="max-w-7xl mx-auto px-12 py-4 flex items-center justify-between"
+                className="w-full px-32 py-6 flex items-center justify-between"
             >
-                {/* Logo à gauche */}
-                <Link href="/" className="flex items-center gap-3">
+                {/* Logo + Foodly */}
+                <Link href="/" className="flex items-center gap-4">
                     <Image
                         src="/logo-foodly.png"
                         alt="Foodly Logo"
-                        width={48}
-                        height={48}
+                        width={56}
+                        height={56}
                         className="object-contain"
                     />
-                    <span className="text-xl font-bold bg-gradient-to-r from-[var(--color-tertiary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
+                    <span className="text-2xl font-bold bg-gradient-to-r from-[var(--color-tertiary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
             Foodly
           </span>
                 </Link>
 
                 {/* Navigation */}
-                <nav className="hidden md:flex items-center gap-8 text-base font-semibold">
+                <nav className="hidden lg:flex items-center gap-10 text-lg font-semibold">
                     {links.map((link) => (
                         <Link
                             key={link.href}
