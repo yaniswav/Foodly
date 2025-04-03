@@ -1,10 +1,9 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import { X, Search, Star, Clock } from "lucide-react"
-import clsx from "clsx"
 
 interface Props {
     onClose: () => void
@@ -45,16 +44,16 @@ export default function SearchOverlay({ onClose }: Props) {
     const [results, setResults] = useState<typeof mockResults>([])
     const containerRef = useRef<HTMLDivElement>(null)
 
-    // ⌨️ ESC
+    // Fermer avec ESC
     useEffect(() => {
-        const handleKey = (e: KeyboardEvent) => {
+        const handleEsc = (e: KeyboardEvent) => {
             if (e.key === "Escape") onClose()
         }
-        window.addEventListener("keydown", handleKey)
-        return () => window.removeEventListener("keydown", handleKey)
+        window.addEventListener("keydown", handleEsc)
+        return () => window.removeEventListener("keydown", handleEsc)
     }, [onClose])
 
-    // 🖱️ clic extérieur
+    // Fermer avec clic hors barre
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
@@ -65,7 +64,7 @@ export default function SearchOverlay({ onClose }: Props) {
         return () => document.removeEventListener("mousedown", handleClickOutside)
     }, [onClose])
 
-    // 🔍 Résultats dynamiques
+    // Simulation recherche
     useEffect(() => {
         if (searchTerm.length > 0) {
             setResults(
@@ -82,17 +81,12 @@ export default function SearchOverlay({ onClose }: Props) {
 
     return (
         <AnimatePresence>
-            <motion.div
-                className="fixed inset-0 z-50"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-            >
-                {/* 👇 Fond flouté cliquable */}
-                <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
+            <motion.div className="fixed inset-0 z-50">
+                <div className="absolute inset-0 backdrop-blur-[2px] bg-black/10 z-0" />
 
-                {/* 👇 Barre centrée sous header */}
-                <div className="relative w-full h-full flex flex-col items-center pt-[100px] px-4 overflow-y-auto">
+
+                {/* ✅ Barre + résultats au-dessus du flou */}
+                <div className="relative z-20 w-full h-full flex flex-col items-center pt-[100px] px-4 overflow-y-auto">
                     <motion.div
                         ref={containerRef}
                         className="w-full max-w-xl"
@@ -100,39 +94,37 @@ export default function SearchOverlay({ onClose }: Props) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -20, opacity: 0 }}
                     >
-                        {/* 🔍 Barre de recherche */}
+                        {/* ✅ Barre de recherche avec icônes */}
                         <div className="relative bg-white/90 backdrop-blur-md shadow-xl rounded-full p-4 flex items-center border border-[var(--color-secondary)]">
-                            <Search className="w-5 h-5 text-[var(--color-gray-3)] mr-3" />
-                            <div className="relative flex-1">
-                                <input
-                                    type="text"
-                                    id="search"
-                                    placeholder=" "
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="peer w-full bg-transparent focus:outline-none text-[var(--color-black-1)] placeholder-transparent"
-                                    autoFocus
-                                />
-                                <label
-                                    htmlFor="search"
-                                    className={clsx(
-                                        "absolute left-0 top-1/2 -translate-y-1/2 text-[var(--color-gray-3)] pointer-events-none transition-all",
-                                        "peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base",
-                                        "peer-focus:top-[-1.2rem] peer-focus:text-sm peer-focus:text-[var(--color-primary)]"
-                                    )}
-                                >
-                                    Rechercher un plat ou un restaurant
-                                </label>
+                            {/* Icône de recherche */}
+                            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--color-gray-3)]">
+                                <Search className="w-5 h-5" />
                             </div>
+
+                            {/* Champ de recherche */}
+                            <input
+                                type="text"
+                                value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                placeholder="Rechercher un plat ou un restaurant"
+                                autoComplete="off"
+                                autoCorrect="off"
+                                spellCheck={false}
+                                name="search-input"
+                                className="w-full pl-12 pr-12 bg-transparent focus:outline-none text-[var(--color-black-1)] placeholder-[var(--color-gray-3)]"
+                                autoFocus
+                            />
+
+                            {/* Bouton de fermeture */}
                             <button
                                 onClick={onClose}
-                                className="ml-3 text-[var(--color-gray-3)] hover:text-[var(--color-black-1)] transition"
+                                className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--color-gray-3)] hover:text-[var(--color-black-1)] transition"
                             >
                                 <X className="w-5 h-5" />
                             </button>
                         </div>
 
-                        {/* 🧾 Résultats */}
+                        {/* ✅ Résultats mock */}
                         {results.length > 0 && (
                             <motion.div
                                 className="mt-6 bg-white/90 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-white/30 max-h-[60vh] overflow-y-auto"
