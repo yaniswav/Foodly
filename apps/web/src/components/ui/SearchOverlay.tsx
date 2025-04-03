@@ -1,10 +1,14 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import Link from "next/link"
-import { Search, X, Star, Clock, ShoppingBag, User } from "lucide-react"
+import { X, Search, Star, Clock } from "lucide-react"
+import clsx from "clsx"
+
+interface Props {
+    onClose: () => void
+}
 
 const mockResults = [
     {
@@ -36,99 +40,112 @@ const mockResults = [
     },
 ]
 
-interface SearchOverlayProps {
-    onClose: () => void
-}
-
-export default function SearchOverlay({ onClose }: SearchOverlayProps) {
+export default function SearchOverlay({ onClose }: Props) {
     const [searchTerm, setSearchTerm] = useState("")
     const [results, setResults] = useState<typeof mockResults>([])
+    const containerRef = useRef<HTMLDivElement>(null)
 
+    // ⌨️ ESC
+    useEffect(() => {
+        const handleKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") onClose()
+        }
+        window.addEventListener("keydown", handleKey)
+        return () => window.removeEventListener("keydown", handleKey)
+    }, [onClose])
+
+    // 🖱️ clic extérieur
+    useEffect(() => {
+        const handleClickOutside = (e: MouseEvent) => {
+            if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+                onClose()
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside)
+        return () => document.removeEventListener("mousedown", handleClickOutside)
+    }, [onClose])
+
+    // 🔍 Résultats dynamiques
     useEffect(() => {
         if (searchTerm.length > 0) {
-            const filtered = mockResults.filter(
-                (item) =>
-                    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    item.category.toLowerCase().includes(searchTerm.toLowerCase())
+            setResults(
+                mockResults.filter(
+                    (item) =>
+                        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        item.category.toLowerCase().includes(searchTerm.toLowerCase())
+                )
             )
-            setResults(filtered)
         } else {
             setResults([])
         }
     }, [searchTerm])
 
     return (
-        <motion.div
-            className="fixed inset-0 z-50 flex flex-col bg-gradient-to-br from-[var(--color-secondary)] to-[var(--color-tertiary)]"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-        >
-            {/* HEADER */}
-            <div className="w-full bg-white/90 backdrop-blur-md p-4 md:px-8 flex justify-between items-center border-b border-[var(--color-secondary)]">
-                <Link href="/" className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-[var(--color-secondary)] rounded-full flex items-center justify-center">
-                        <ShoppingBag className="w-5 h-5 text-white" />
-                    </div>
-                    <span className="text-xl font-bold bg-gradient-to-r from-[var(--color-tertiary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-            Foodly
-          </span>
-                </Link>
+        <AnimatePresence>
+            <motion.div
+                className="fixed inset-0 z-50"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+            >
+                {/* 👇 Fond flouté cliquable */}
+                <div className="absolute inset-0 bg-black/10 backdrop-blur-sm" />
 
-                <motion.button
-                    className="px-4 py-2 rounded-full bg-gradient-to-r from-[var(--color-secondary)] to-[var(--color-tertiary)] text-white font-medium flex items-center gap-2 shadow-md hover:shadow-lg transition-all"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                >
-                    <User className="w-4 h-4" />
-                    <span>Connexion</span>
-                </motion.button>
-            </div>
-
-            {/* SEARCH */}
-            <div className="flex-1 flex flex-col items-center pt-8 px-4 relative">
-                {/* Background pattern */}
-                <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('data:image/svg+xml,%3Csvg width=\\'20\\' height=\\'20\\' viewBox=\\'0 0 20 20\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'#000000\\' fill-opacity=\\'1\\'%3E%3Ccircle cx=\\'3\\' cy=\\'3\\' r=\\'1.5\\'/%3E%3C/g%3E%3C/svg%3E')] bg-repeat bg-[length:20px_20px]" />
-
-                <div className="w-full max-w-md z-10">
-                    <div className="relative">
-                        <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
-                            <Search className="w-5 h-5" />
+                {/* 👇 Barre centrée sous header */}
+                <div className="relative w-full h-full flex flex-col items-center pt-[100px] px-4 overflow-y-auto">
+                    <motion.div
+                        ref={containerRef}
+                        className="w-full max-w-xl"
+                        initial={{ y: -20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -20, opacity: 0 }}
+                    >
+                        {/* 🔍 Barre de recherche */}
+                        <div className="relative bg-white/90 backdrop-blur-md shadow-xl rounded-full p-4 flex items-center border border-[var(--color-secondary)]">
+                            <Search className="w-5 h-5 text-[var(--color-gray-3)] mr-3" />
+                            <div className="relative flex-1">
+                                <input
+                                    type="text"
+                                    id="search"
+                                    placeholder=" "
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                    className="peer w-full bg-transparent focus:outline-none text-[var(--color-black-1)] placeholder-transparent"
+                                    autoFocus
+                                />
+                                <label
+                                    htmlFor="search"
+                                    className={clsx(
+                                        "absolute left-0 top-1/2 -translate-y-1/2 text-[var(--color-gray-3)] pointer-events-none transition-all",
+                                        "peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-base",
+                                        "peer-focus:top-[-1.2rem] peer-focus:text-sm peer-focus:text-[var(--color-primary)]"
+                                    )}
+                                >
+                                    Rechercher un plat ou un restaurant
+                                </label>
+                            </div>
+                            <button
+                                onClick={onClose}
+                                className="ml-3 text-[var(--color-gray-3)] hover:text-[var(--color-black-1)] transition"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
                         </div>
 
-                        <input
-                            type="text"
-                            placeholder="Rechercher un plat ou un restaurant"
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full p-4 pl-12 pr-12 border border-white/30 rounded-full focus:outline-none focus:ring-2 focus:ring-[var(--color-black-1)] bg-white/90 backdrop-blur-md shadow-xl"
-                            autoFocus
-                        />
-
-                        <button
-                            className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                            onClick={onClose}
-                        >
-                            <X className="w-5 h-5" />
-                        </button>
-                    </div>
-
-                    {/* RESULTS */}
-                    <AnimatePresence>
+                        {/* 🧾 Résultats */}
                         {results.length > 0 && (
                             <motion.div
-                                className="mt-4 bg-white/90 backdrop-blur-md rounded-2xl shadow-xl overflow-hidden border border-white/30"
+                                className="mt-6 bg-white/90 backdrop-blur-md rounded-xl shadow-xl overflow-hidden border border-white/30 max-h-[60vh] overflow-y-auto"
                                 initial={{ opacity: 0, y: -10 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 exit={{ opacity: 0, y: -10 }}
                             >
                                 {results.map((item) => (
-                                    <motion.div
+                                    <div
                                         key={item.id}
-                                        className="flex items-center p-4 border-b last:border-b-0 hover:bg-white/50 cursor-pointer transition-colors"
-                                        whileHover={{ x: 5 }}
+                                        className="flex items-center p-4 border-b last:border-none hover:bg-white/70 transition-colors cursor-pointer"
                                     >
-                                        <div className="w-20 h-20 relative rounded-xl overflow-hidden mr-4 shadow-md">
+                                        <div className="w-20 h-20 relative rounded-xl overflow-hidden mr-4">
                                             <Image
                                                 src={item.image}
                                                 alt={item.name}
@@ -136,44 +153,28 @@ export default function SearchOverlay({ onClose }: SearchOverlayProps) {
                                                 className="object-cover"
                                             />
                                         </div>
-
                                         <div className="flex-1">
-                                            <h3 className="font-bold text-[var(--color-black-1)]">
-                                                {item.name}
-                                            </h3>
+                                            <h3 className="font-bold text-[var(--color-black-1)]">{item.name}</h3>
                                             <p className="text-sm text-[var(--color-gray-3)]">{item.category}</p>
-
                                             <div className="flex items-center gap-4 mt-2 text-sm">
-                                                <div className="flex items-center text-[var(--color-secondary)]">
-                                                    <Star className="w-4 h-4 fill-[var(--color-secondary)] mr-1" />
-                                                    {item.rating}
-                                                </div>
-                                                <div className="flex items-center text-[var(--color-gray-3)]">
-                                                    <Clock className="w-4 h-4 mr-1" />
+                        <span className="text-[var(--color-secondary)] flex items-center">
+                          <Star className="w-4 h-4 fill-[var(--color-secondary)] mr-1" />
+                            {item.rating}
+                        </span>
+                                                <span className="text-[var(--color-gray-3)] flex items-center">
+                          <Clock className="w-4 h-4 mr-1" />
                                                     {item.deliveryTime}
-                                                </div>
-                                                <div className="font-medium">{item.price}</div>
+                        </span>
+                                                <span className="font-medium">{item.price}</span>
                                             </div>
                                         </div>
-                                    </motion.div>
+                                    </div>
                                 ))}
                             </motion.div>
                         )}
-                    </AnimatePresence>
+                    </motion.div>
                 </div>
-            </div>
-
-            {/* DECOR */}
-            <div className="absolute inset-0 pointer-events-none">
-                <div className="absolute right-0 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm rounded-full w-[300px] h-[300px] md:w-[400px] md:h-[400px] flex items-center justify-center opacity-50 border border-white/20">
-                    <div className="text-3xl md:text-4xl font-bold tracking-tighter text-center text-white mix-blend-overlay opacity-70">
-                        <div>BURGER</div>
-                        <div>3D</div>
-                        <div>DECOM</div>
-                        <div>POSE</div>
-                    </div>
-                </div>
-            </div>
-        </motion.div>
+            </motion.div>
+        </AnimatePresence>
     )
 }

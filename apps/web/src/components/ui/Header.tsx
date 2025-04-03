@@ -5,9 +5,13 @@ import { usePathname } from "next/navigation"
 import clsx from "clsx"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { Search } from "lucide-react"
+import { useState } from "react"
+import SearchOverlay from "@/components/ui/SearchOverlay"
 
 export default function Header() {
     const pathname = usePathname()
+    const [isSearchOpen, setIsSearchOpen] = useState(false)
 
     const links = [
         { href: "/restaurant", label: "Restaurants" },
@@ -54,7 +58,18 @@ export default function Header() {
                         </Link>
                     ))}
                 </nav>
+
+                {/* Bouton recherche */}
+                <button
+                    onClick={() => setIsSearchOpen(true)}
+                    className="ml-6 p-2 rounded-full hover:bg-gray-100 transition-colors"
+                >
+                    <Search className="w-6 h-6 text-[var(--color-primary)]" />
+                </button>
             </motion.div>
+
+            {/* Overlay de recherche */}
+            {isSearchOpen && <SearchOverlay onClose={() => setIsSearchOpen(false)} />}
         </header>
     )
 }
