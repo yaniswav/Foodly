@@ -63,3 +63,8 @@ body {
   font-size: var(--text-base);
   line-height: var(--lh-base);
 }
+
+html {
+  overflow-y: scroll;
+}
+
