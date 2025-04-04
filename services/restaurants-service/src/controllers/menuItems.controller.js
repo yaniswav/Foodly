@@ -5,7 +5,7 @@ exports.getById = async (req, res) => {
         const menu = await MenuItem.getById(req.query.id);
         res.json(menu);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({message: error.message});
     }
 }
 
@@ -14,7 +14,7 @@ exports.getAllFromRestaurant = async (req, res) => {
         const menus = await MenuItem.getByRestaurantId(req.query.id);
         res.json(menus);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({message: error.message});
     }
 }
 
@@ -23,7 +23,7 @@ exports.create = async (req, res) => {
         const menu = await MenuItem.create(req.body);
         res.status(201).json(menu);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({message: error.message});
     }
 }
 
@@ -52,7 +52,7 @@ exports.update = async (req, res) => {
             res.status(200).json(updatedItem);
         });
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({message: "Server error", error: error.message});
     }
 }
 
@@ -60,8 +60,16 @@ exports.deleteItem = async (req, res) => {
     const menuItemId = req.body.id;
     try {
         await MenuItem.delete(menuItemId);
-        res.status(200).json({ message: "Item deleted successfully" });
+        res.status(200).json({message: "Item deleted successfully"});
     } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
+        res.status(500).json({message: "Server error", error: error.message});
     }
+}
+
+
+exports.test = async (req, res) => {
+    return res.status(200).json({
+        value: 1,
+        message: "test"
+    });
 }
