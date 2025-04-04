@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import { Flame, Pizza, UtensilsCrossed, Salad, Soup, Cookie } from "lucide-react"
 
@@ -28,7 +28,7 @@ const allRestaurants = [
         name: "Sushi Yama",
         image: "/placeholder.svg",
         rating: 4.7,
-        cuisine: "Japonais",
+        cuisine: "Asiatique",
         deliveryTime: "30-40 min",
         distance: "2.1 km",
     },
@@ -37,7 +37,7 @@ const allRestaurants = [
         name: "Tacos Avenue",
         image: "/placeholder.svg",
         rating: 4.1,
-        cuisine: "Tacos",
+        cuisine: "Fast Food",
         deliveryTime: "20-25 min",
         distance: "1.6 km",
     },
@@ -72,6 +72,13 @@ const filters = [
 
 export default function RestaurantPage() {
     const [loading, setLoading] = useState(true)
+    const [activeFilter, setActiveFilter] = useState<string | null>(null)
+
+    const filteredRestaurants = activeFilter
+        ? allRestaurants.filter((r) =>
+            r.cuisine.toLowerCase().includes(activeFilter.toLowerCase())
+        )
+        : allRestaurants
 
     useEffect(() => {
         const timer = setTimeout(() => setLoading(false), 1000)
@@ -80,39 +87,42 @@ export default function RestaurantPage() {
 
     return (
         <main className="px-6 md:px-16 py-16 space-y-10">
-
-            {/* Titre principal */}
             <div>
-                <h1 className="text-[56px] leading-[61.6px] font-bold text-[var(--color-black-1)]">
+                <h1 className="text-[var(--heading-1)] leading-[var(--lh-heading-1)] font-bold text-[var(--color-black-1)]">
                     Nos restaurants
                 </h1>
-                <p className="text-[20px] leading-[28px] text-[var(--color-gray-2)] mt-2">
+                <p className="text-[var(--text-lg)] leading-[var(--lh-lg)] text-[var(--color-gray-2)] mt-2">
                     Trouvez votre bonheur culinaire en quelques clics !
                 </p>
             </div>
 
-            {/* Filtres visuels */}
             <div className="flex flex-wrap gap-6 justify-center">
-                {filters.map(({ icon: Icon, label }) => (
-                    <div key={label} className="flex flex-col items-center gap-2">
-                        <button
-                            className="flex items-center justify-center w-20 h-20 rounded-full bg-[var(--color-secondary)] text-white shadow hover:shadow-md transition"
-                        >
-                            <Icon className="w-6 h-6 text-white" />
-                        </button>
-                        <span className="text-sm text-center text-[var(--color-black-1)]">{label}</span>
-                    </div>
-                ))}
+                {filters.map(({ icon: Icon, label }) => {
+                    const isActive = activeFilter === label
+                    return (
+                        <div key={label} className="flex flex-col items-center gap-2">
+                            <button
+                                onClick={() => setActiveFilter(isActive ? null : label)}
+                                className={`flex items-center justify-center w-20 h-20 rounded-full transition shadow 
+                  ${isActive
+                                    ? "bg-[var(--color-tertiary)]"
+                                    : "bg-[var(--color-secondary)] hover:brightness-110"}`}
+                            >
+                                <Icon className="w-6 h-6 text-white" />
+                            </button>
+                            <span className="text-sm text-center text-[var(--color-black-1)]">{label}</span>
+                        </div>
+                    )
+                })}
             </div>
 
-            {/* Liste des restaurants */}
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 {loading ? (
                     [...Array(6)].map((_, i) => (
                         <div key={i} className="h-56 bg-[var(--color-gray-5)] animate-pulse rounded-xl" />
                     ))
                 ) : (
-                    allRestaurants.map((rest) => (
+                    filteredRestaurants.map((rest) => (
                         <Link
                             href={`/restaurant/${rest.id}`}
                             key={rest.id}

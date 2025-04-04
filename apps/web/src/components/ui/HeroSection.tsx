@@ -35,8 +35,8 @@ export default function HeroSection() {
                     fontWeight: "bold",
                     color: "var(--color-white)"
                 }}>
-                    Délicieux repas <br />
-                    <span style={{ color: "var(--color-black-1)" }}>livrés chez vous</span>
+                    Des repas déclicieux <br />
+                    <span style={{ color: "var(--color-black-1)" }}>livrés rapidement chez vous !</span>
                 </h1>
 
                 <p style={{
