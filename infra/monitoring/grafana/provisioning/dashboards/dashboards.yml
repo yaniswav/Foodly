@@ -1,0 +1,11 @@
+#aller chercher les dashboards JSON automatiquement
+apiVersion: 1
+
+providers:
+  - name: 'Preconfigured Dashboards'
+    folder: 'Monitoring'
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
