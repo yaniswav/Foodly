@@ -65,11 +65,3 @@ exports.deleteItem = async (req, res) => {
         res.status(500).json({message: "Server error", error: error.message});
     }
 }
-
-
-exports.test = async (req, res) => {
-    return res.status(200).json({
-        value: 1,
-        message: "test"
-    });
-}
