@@ -16,5 +16,5 @@ module.exports = function (app) {
     app.patch("/menuItem", requiredFields(["id"]), menuItemsController.update);
     app.delete("/menuItem", requiredFields(["id"]), menuItemsController.deleteItem);
 
-    app.delete("/metrics", menuItemsController.test);
+    app.get("/metrics", menuItemsController.test);
 };
