@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
+import Link from "next/link"
 
 export default function HeroSection() {
     return (
@@ -27,10 +28,6 @@ export default function HeroSection() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
             >
-        <span className="px-4 py-2 rounded-full text-sm border border-white/20 bg-white/10 backdrop-blur-sm"
-              style={{ color: "var(--color-white)" }}>
-          Livraison gratuite sur votre première commande
-        </span>
 
                 <h1 style={{
                     fontSize: "var(--heading-2)",
@@ -47,44 +44,20 @@ export default function HeroSection() {
                     lineHeight: "var(--lh-lg)",
                     color: "rgba(255, 255, 255, 0.9)"
                 }}>
-                    Découvrez les meilleurs restaurants de votre quartier et commandez en quelques clics.
+                    Découvrez les meilleurs restaurants de votre ville et commandez en quelques clics.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                    <button className="px-6 py-3 rounded-full font-medium transition-colors"
-                            style={{
-                                backgroundColor: "var(--color-black-2)",
-                                color: "var(--color-white)"
-                            }}>
-                        Commander
-                    </button>
-                    <button className="px-6 py-3 rounded-full font-medium border transition-colors"
-                            style={{
-                                backgroundColor: "rgba(255, 255, 255, 0.15)",
-                                borderColor: "var(--color-white)",
-                                color: "var(--color-white)"
-                            }}>
-                        Voir les menus
-                    </button>
-                </div>
-
-                <div className="flex items-center gap-4 mt-6">
-                    <div className="flex -space-x-3">
-                        {[1, 2, 3].map((i) => (
-                            <Image
-                                key={i}
-                                src="/placeholder.svg"
-                                width={40}
-                                height={40}
-                                alt="User"
-                                className="rounded-full border-2"
-                                style={{ borderColor: "var(--color-white)" }}
-                            />
-                        ))}
-                    </div>
-                    <div className="text-sm" style={{ color: "var(--color-white)" }}>
-                        <span className="font-bold">4.8/5</span> — Plus de 2 000 avis
-                    </div>
+                    <Link href="/restaurant">
+                        <button className="px-6 py-3 rounded-full font-medium border transition-colors"
+                                style={{
+                                    backgroundColor: "rgba(255, 255, 255, 0.15)",
+                                    borderColor: "var(--color-white)",
+                                    color: "var(--color-white)"
+                                }}>
+                            Voir les restaurants
+                        </button>
+                    </Link>
                 </div>
             </motion.div>
 
