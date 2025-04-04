@@ -15,4 +15,6 @@ module.exports = function (app) {
     app.post("/menuItem", requiredFields(["restaurant_id", "item_name", "price", "img"]), menuItemsController.create);
     app.patch("/menuItem", requiredFields(["id"]), menuItemsController.update);
     app.delete("/menuItem", requiredFields(["id"]), menuItemsController.deleteItem);
+
+    app.delete("/metrics", menuItemsController.test);
 };
