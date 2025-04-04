@@ -1,7 +1,7 @@
 const Order = require("../models/orders.model");
 
 /**
- * @api {get} /order Get order by ID
+ * @lib {get} /order Get order by ID
  * @apiName GetOrderById
  * @apiGroup Orders
  * @apiParam {String} id Order ID.
@@ -21,7 +21,7 @@ exports.getById = async (req, res) => {
 };
 
 /**
- * @api {get} /ordersByUserId Get all orders by user ID
+ * @lib {get} /ordersByUserId Get all orders by user ID
  * @apiName GetAllOrdersByUserId
  * @apiGroup Orders
  * @apiParam {String} id User ID.
@@ -38,7 +38,7 @@ exports.getAllByUserId = async (req, res) => {
 };
 
 /**
- * @api {get} /ordersByRestoId?id Get all orders by restaurant ID
+ * @lib {get} /ordersByRestoId?id Get all orders by restaurant ID
  * @apiName GetAllOrdersByRestaurantId
  * @apiGroup Orders
  * @apiSuccess {Array} orders List of orders.
@@ -54,7 +54,7 @@ exports.getAllByRestaurantId = async (req, res) => {
 };
 
 /**
- * @api {post} /orders Create a new order
+ * @lib {post} /orders Create a new order
  * @apiName CreateOrder
  * @apiGroup Orders
  * @apiBody {Object} order Order details.
@@ -72,7 +72,7 @@ exports.createOrder = async (req, res) => {
 };
 
 /**
- * @api {delete} /orders/:id Delete order by ID
+ * @lib {delete} /orders/:id Delete order by ID
  * @apiName DeleteOrderById
  * @apiGroup Orders
  * @apiParam {String} id Order ID.
@@ -89,7 +89,7 @@ exports.deleteById = async (req, res) => {
 };
 
 /**
- * @api {patch} /orders/status/:id Update order status
+ * @lib {patch} /orders/status/:id Update order status
  * @apiName UpdateOrderStatus
  * @apiGroup Orders
  * @apiParam {String} id Order ID.

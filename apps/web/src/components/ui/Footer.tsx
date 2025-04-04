@@ -24,7 +24,7 @@ export default function Footer() {
                 <div>
                     <h4 className="text-base font-medium mb-4">Support</h4>
                     <ul className="space-y-1 text-sm">
-                        <li><Link href="#">Centre d'aide</Link></li>
+                        <li><Link href="#">Centre aide</Link></li>
                         <li><Link href="#">Contactez-nous</Link></li>
                         <li><Link href="#">Confidentialité</Link></li>
                         <li><Link href="#">Conditions</Link></li>
@@ -32,7 +32,7 @@ export default function Footer() {
                 </div>
 
                 <div>
-                    <h4 className="text-base font-medium mb-4">Télécharger l'appli</h4>
+                    <h4 className="text-base font-medium mb-4">Télécharger appli</h4>
                     <p className="text-sm mb-2">Commandez plus vite depuis votre mobile.</p>
                     <div className="flex flex-col gap-2">
                         <a href="#" className="bg-white text-black px-4 py-2 rounded-md text-center text-sm hover:bg-gray-200 transition">App Store</a>
