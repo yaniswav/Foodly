@@ -1,6 +1,7 @@
 services:
   prometheus:
     build: ./prometheus
+    container_name: prometheus
     ports:
       - "9090:9090"
     networks:
@@ -8,6 +9,7 @@ services:
 
   grafana:
     build: ./grafana
+    container_name: grafana
     ports:
       - "3000:3000"
     volumes:
@@ -20,6 +22,7 @@ services:
 
   node-exporter:
     image: prom/node-exporter:latest
+    container_name: node-exporter
     volumes:
       - /proc:/host/proc:ro
       - /sys:/host/sys:ro
