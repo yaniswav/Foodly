@@ -1,7 +1,9 @@
-export default function ProfilePage() {
+import { MyAccount } from "@/components/my-account";
+
+export default function Page() {
     return (
         <main className="p-4">
-            <h1 className="text-2xl font-bold">Page de profil</h1>
+            <MyAccount />
         </main>
     );
 }
