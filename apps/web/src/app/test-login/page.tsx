@@ -4,97 +4,83 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState("")
     const router = useRouter()
+    const [email, setEmail] = useState("bob88@gmail.com")
+    const [password, setPassword] = useState("mdp")
+    const [error, setError] = useState("")
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault()
-        setLoading(true)
         setError("")
 
         try {
             const res = await fetch("http://localhost:8080/auth/login", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {
+                    "Content-Type": "application/json",
+                },
                 body: JSON.stringify({ email, password }),
-                credentials: "include",
             })
 
             if (!res.ok) {
                 const msg = await res.text()
-                throw new Error(msg || "Identifiants incorrects")
+                throw new Error(msg || "Identifiants incorrects.")
             }
 
-            const data = await res.json()
-            console.log("✅ Réponse backend :", data)
+            const result = await res.json()
+            console.log("Réponse backend :", result)
 
+            const token = result?.access_tocken //TEMPORAIRE
+            if (!token) {
+                throw new Error("Aucun token reçu.")
+            }
 
-            localStorage.setItem("access_token", data.access_token)
-
-
-            router.push("/")
-
+            localStorage.setItem("access_token", token)
+            router.push("/restaurant")
         } catch (err: any) {
-            console.error("Erreur login :", err)
-            setError(err.message || "Erreur inconnue")
-        } finally {
-            setLoading(false)
+            setError(err.message || "Erreur lors de la connexion.")
         }
     }
 
     return (
-        <main className="min-h-screen flex items-center justify-center px-6">
+        <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
             <form
                 onSubmit={handleLogin}
-                className="bg-white shadow-md rounded-xl p-8 max-w-md w-full space-y-6 border border-gray-200"
+                className="bg-white shadow-xl rounded-xl p-8 w-full max-w-md space-y-6"
             >
-                <h1 className="text-2xl font-bold text-center text-[var(--color-secondary)]">
-                    Connexion
-                </h1>
+                <h1 className="text-2xl font-bold text-center">Connexion</h1>
 
-                {error && (
-                    <p className="text-sm text-[var(--color-error)] text-center">
-                        {error}
-                    </p>
-                )}
-
-                <div className="flex flex-col space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium text-gray-700">
-                        Email
-                    </label>
+                <div>
+                    <label className="block mb-1 font-medium">Email</label>
                     <input
                         type="email"
-                        id="email"
-                        required
+                        className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+                        required
                     />
                 </div>
 
-                <div className="flex flex-col space-y-2">
-                    <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                        Mot de passe
-                    </label>
+                <div>
+                    <label className="block mb-1 font-medium">Mot de passe</label>
                     <input
                         type="password"
-                        id="password"
-                        required
+                        className="w-full border border-gray-300 px-4 py-2 rounded-lg focus:outline-none focus:ring"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-secondary)]"
+                        required
                     />
                 </div>
+
+                {error && (
+                    <p className="text-red-500 text-sm text-center">{error}</p>
+                )}
 
                 <button
                     type="submit"
-                    disabled={loading}
-                    className="w-full bg-[var(--color-secondary)] text-white font-semibold py-2 px-4 rounded-md hover:bg-opacity-90 transition"
+                    className="w-full py-3 rounded-lg bg-amber-500 text-white font-semibold hover:bg-amber-600 transition"
                 >
-                    {loading ? "Connexion..." : "Se connecter"}
+                    Se connecter
                 </button>
             </form>
         </main>
