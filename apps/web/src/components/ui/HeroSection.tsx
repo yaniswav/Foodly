@@ -74,7 +74,7 @@ export default function HeroSection() {
                          border: "1px solid rgba(255, 255, 255, 0.3)"
                      }}>
                     <Image
-                        src="/burgerv2.png"
+                        src="/burgerV2.png"
                         alt="Burger 3D"
                         width={400}
                         height={400}
