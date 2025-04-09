@@ -48,7 +48,7 @@ exports.login = async (req, res) => {
 			path: '/token'
 		});
 
-		return res.status(200).json({ "user": user, "access_tocken": accessToken, "access_token_expiresIn": Math.floor(Date.now() / 1000) + 120, "refresh_token_expiresIn": Math.floor(Date.now() / 1000) + 360 });
+		return res.status(200).json({ "user": user, "access_token": accessToken, "access_token_expiresIn": Math.floor(Date.now() / 1000) + 120, "refresh_token_expiresIn": Math.floor(Date.now() / 1000) + 360 });
 	} else {
 		return res.status(401).json({ message: "Invalid credentials" });
 	}
