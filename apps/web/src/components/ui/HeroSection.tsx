@@ -1,14 +1,17 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Image from "next/image"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function HeroSection() {
     return (
-        <section className="w-full flex flex-col md:flex-row items-center justify-between min-h-screen pt-28 px-6 md:px-12 relative overflow-hidden"
-                 style={{ background: "linear-gradient(135deg, var(--color-secondary), var(--color-tertiary))" }}>
-
+        <section
+            className="w-full flex flex-col md:flex-row items-center justify-between min-h-screen pt-28 px-6 md:px-12 relative overflow-hidden"
+            style={{
+                background: "linear-gradient(135deg, var(--color-secondary), var(--color-tertiary))",
+            }}
+        >
             {/* Background pattern */}
             <div className="absolute inset-0 opacity-10 pointer-events-none z-0">
                 <div
@@ -28,35 +31,42 @@ export default function HeroSection() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.8, delay: 0.2 }}
             >
-
-                <h1 style={{
-                    fontSize: "var(--heading-2)",
-                    lineHeight: "var(--lh-heading-2)",
-                    fontWeight: "bold",
-                    color: "var(--color-white)"
-                }}>
-                    Des repas déclicieux <br />
-                    <span style={{ color: "var(--color-black-1)" }}>livrés rapidement chez vous !</span>
+                <h1
+                    style={{
+                        fontSize: "var(--heading-2)",
+                        lineHeight: "var(--lh-heading-2)",
+                        fontWeight: "bold",
+                        color: "var(--color-white)",
+                    }}
+                >
+                    Des repas délicieux <br />
+                    <span style={{ color: "var(--color-black-1)" }}>
+                        livrés rapidement chez vous !
+                    </span>
                 </h1>
 
-                <p style={{
-                    fontSize: "var(--text-lg)",
-                    lineHeight: "var(--lh-lg)",
-                    color: "rgba(255, 255, 255, 0.9)"
-                }}>
+                <p
+                    style={{
+                        fontSize: "var(--text-lg)",
+                        lineHeight: "var(--lh-lg)",
+                        color: "rgba(255, 255, 255, 0.9)",
+                    }}
+                >
                     Découvrez les meilleurs restaurants de votre ville et commandez en quelques clics.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4">
-                    <Link href="/restaurant">
-                        <button className="px-6 py-3 rounded-full font-medium border transition-colors"
-                                style={{
-                                    backgroundColor: "rgba(255, 255, 255, 0.15)",
-                                    borderColor: "var(--color-white)",
-                                    color: "var(--color-white)"
-                                }}>
-                            Voir les restaurants
-                        </button>
+                    {/* ✅ Correction : remplace le <button> par un vrai <Link> stylé */}
+                    <Link
+                        href="/restaurant"
+                        className="px-6 py-3 rounded-full font-medium border transition-colors"
+                        style={{
+                            backgroundColor: "rgba(255, 255, 255, 0.15)",
+                            borderColor: "var(--color-white)",
+                            color: "var(--color-white)",
+                        }}
+                    >
+                        Voir les restaurants
                     </Link>
                 </div>
             </motion.div>
@@ -68,11 +78,13 @@ export default function HeroSection() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.8, delay: 0.4 }}
             >
-                <div className="rounded-full w-[300px] h-[300px] md:w-[450px] md:h-[450px] flex items-center justify-center shadow-2xl"
-                     style={{
-                         backgroundColor: "rgba(255, 255, 255, 0.2)",
-                         border: "1px solid rgba(255, 255, 255, 0.3)"
-                     }}>
+                <div
+                    className="rounded-full w-[300px] h-[300px] md:w-[450px] md:h-[450px] flex items-center justify-center shadow-2xl"
+                    style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.2)",
+                        border: "1px solid rgba(255, 255, 255, 0.3)",
+                    }}
+                >
                     <Image
                         src="/burger.png"
                         alt="Burger 3D"
@@ -84,5 +96,5 @@ export default function HeroSection() {
                 </div>
             </motion.div>
         </section>
-    )
+    );
 }

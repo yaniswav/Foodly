@@ -1,9 +1,5 @@
-import { DashboardHome } from "@/components/dashboard-home"; // ✅ Bon nom
+import { DashboardHome } from "@/components/dashboard-home"
 
-export default function Page() {
-    return (
-        <main className="p-4">
-            <DashboardHome /> {/* ✅ Bon composant */}
-        </main>
-    );
+export default function DashboardPage() {
+    return <DashboardHome />
 }
