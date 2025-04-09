@@ -130,3 +130,20 @@ export async function getMenuByRestaurantId(id: string, token: string) {
     return res.json()
 }
 
+export async function registerUser(formData: any) {
+    const response = await fetch("http://localhost:8080/register", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+    })
+
+    if (!response.ok) {
+        throw new Error("Erreur lors de l’inscription")
+    }
+
+    return response.json()
+}
+
+
