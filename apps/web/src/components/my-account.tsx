@@ -1,28 +1,23 @@
-"use client";
+"use client"
 
-import type React from "react";
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { useToast } from "@/components/ui/use-toast";
+import type React from "react"
+
+import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
+import { useToast } from "@/components/ui/use-toast"
 
 export function MyAccount() {
-    const { toast } = useToast();
+    const { toast } = useToast()
 
-    const [token, setToken] = useState<string | null | undefined>(undefined);
-    const [userId, setUserId] = useState<string | null | undefined>(undefined);
-    const [isSaving, setIsSaving] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [token, setToken] = useState<string | null | undefined>(undefined)
+    const [userId, setUserId] = useState<string | null | undefined>(undefined)
+    const [isSaving, setIsSaving] = useState(false)
+    const [loading, setLoading] = useState(true)
 
     const [formState, setFormState] = useState({
         name: "",
@@ -32,20 +27,20 @@ export function MyAccount() {
         emailNotifications: true,
         pushNotifications: true,
         smsNotifications: false,
-    });
+    })
 
-    // ✅ Récupération du token / userId seulement côté client
+    // Get token and userId from localStorage (client-side only)
     useEffect(() => {
-        const t = localStorage.getItem("token");
-        const uid = localStorage.getItem("userId");
+        const t = localStorage.getItem("token")
+        const uid = localStorage.getItem("userId")
 
-        setToken(t);
-        setUserId(uid);
-    }, []);
+        setToken(t)
+        setUserId(uid)
+    }, [])
 
-    // ✅ Chargement des infos utilisateur
+    // Load user information
     useEffect(() => {
-        if (!token || !userId) return;
+        if (!token || !userId) return
 
         fetch(`http://localhost:8080/users?id=${userId}`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -56,73 +51,65 @@ export function MyAccount() {
                     ...prev,
                     name: `${data.firstname} ${data.lastname}`,
                     email: data.email,
-                    phone: "+33 6 00 00 00 00", // mock
-                    address: "123 rue Foodly, Paris", // mock
-                }));
+                    phone: "+33 6 00 00 00 00", // mock data
+                    address: "123 rue Foodly, Paris", // mock data
+                }))
             })
-            .catch((err) => console.error("Erreur fetch user :", err))
-            .finally(() => setLoading(false));
-    }, [token, userId]);
+            .catch((err) => console.error("Error fetching user:", err))
+            .finally(() => setLoading(false))
+    }, [token, userId])
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormState((prev) => ({ ...prev, [name]: value }));
-    };
+        const { name, value } = e.target
+        setFormState((prev) => ({ ...prev, [name]: value }))
+    }
 
     const handleSwitchChange = (name: string, checked: boolean) => {
-        setFormState((prev) => ({ ...prev, [name]: checked }));
-    };
+        setFormState((prev) => ({ ...prev, [name]: checked }))
+    }
 
     const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        setIsSaving(true);
+        e.preventDefault()
+        setIsSaving(true)
 
-        // ✅ À implémenter : PUT /users/:id pour mise à jour des infos
-
+        // Implement PATCH /users/:id for updating user info
+        // This is a mock implementation
         setTimeout(() => {
-            setIsSaving(false);
+            setIsSaving(false)
             toast({
                 title: "Profil mis à jour",
                 description: "Vos informations ont bien été enregistrées.",
                 className: "bg-green-50 border-green-200",
-            });
-        }, 1000);
-    };
-
-    // ✅ Étape 1 : tant que token/userId ne sont pas initialisés, on ne rend rien
-    if (token === undefined || userId === undefined) {
-        return null; // Pas de rendu => pas d'hydration error
+            })
+        }, 1000)
     }
 
-    // ✅ Étape 2 : utilisateur non connecté
+    // Step 1: Don't render anything until token/userId are initialized
+    if (token === undefined || userId === undefined) {
+        return null
+    }
+
+    // Step 2: User not authenticated
     if (!token || !userId) {
         return (
             <div className="p-6 rounded-xl bg-red-50 border border-red-200 text-red-800 space-y-4 max-w-md mx-auto mt-10 shadow">
                 <h2 className="text-lg font-semibold">Vous devez vous connecter</h2>
                 <p>
-                    Cette page est réservée aux utilisateurs connectés. Veuillez vous authentifier
-                    pour accéder à votre compte.
+                    Cette page est réservée aux utilisateurs connectés. Veuillez vous authentifier pour accéder à votre compte.
                 </p>
-                <Button
-                    className="bg-red-600 hover:bg-red-700 text-white"
-                    onClick={() => (window.location.href = "/login")}
-                >
+                <Button className="bg-red-600 hover:bg-red-700 text-white" onClick={() => (window.location.href = "/login")}>
                     Se connecter
                 </Button>
             </div>
-        );
+        )
     }
 
-    // ✅ Étape 3 : chargement
+    // Step 3: Loading state
     if (loading) {
-        return (
-            <div className="text-center py-10 text-muted-foreground">
-                Chargement de vos informations...
-            </div>
-        );
+        return <div className="text-center py-10 text-muted-foreground">Chargement de vos informations...</div>
     }
 
-    // ✅ Étape 4 : affichage du formulaire complet
+    // Step 4: Display the complete form
     return (
         <div className="space-y-6">
             <div>
@@ -130,11 +117,7 @@ export function MyAccount() {
                 <p className="text-muted-foreground">Gérez vos informations personnelles</p>
             </div>
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
                 <form onSubmit={handleSubmit}>
                     <div className="grid gap-6 md:grid-cols-2">
                         <Card>
@@ -145,40 +128,19 @@ export function MyAccount() {
                             <CardContent className="space-y-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="name">Nom complet</Label>
-                                    <Input
-                                        id="name"
-                                        name="name"
-                                        value={formState.name}
-                                        onChange={handleInputChange}
-                                    />
+                                    <Input id="name" name="name" value={formState.name} onChange={handleInputChange} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="email">Email</Label>
-                                    <Input
-                                        id="email"
-                                        name="email"
-                                        type="email"
-                                        value={formState.email}
-                                        onChange={handleInputChange}
-                                    />
+                                    <Input id="email" name="email" type="email" value={formState.email} onChange={handleInputChange} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="phone">Téléphone</Label>
-                                    <Input
-                                        id="phone"
-                                        name="phone"
-                                        value={formState.phone}
-                                        onChange={handleInputChange}
-                                    />
+                                    <Input id="phone" name="phone" value={formState.phone} onChange={handleInputChange} />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="address">Adresse</Label>
-                                    <Input
-                                        id="address"
-                                        name="address"
-                                        value={formState.address}
-                                        onChange={handleInputChange}
-                                    />
+                                    <Input id="address" name="address" value={formState.address} onChange={handleInputChange} />
                                 </div>
                             </CardContent>
                         </Card>
@@ -214,9 +176,7 @@ export function MyAccount() {
                                         <Switch
                                             id={id}
                                             checked={formState[id as keyof typeof formState] as boolean}
-                                            onCheckedChange={(checked) =>
-                                                handleSwitchChange(id, checked)
-                                            }
+                                            onCheckedChange={(checked) => handleSwitchChange(id, checked)}
                                         />
                                     </div>
                                 ))}
@@ -225,11 +185,7 @@ export function MyAccount() {
                     </div>
 
                     <div className="mt-6 flex justify-end">
-                        <Button
-                            type="submit"
-                            className="bg-black text-white hover:bg-gray-800"
-                            disabled={isSaving}
-                        >
+                        <Button type="submit" className="bg-orange-500 text-white hover:bg-orange-600" disabled={isSaving}>
                             {isSaving ? (
                                 <>
                                     <motion.div
@@ -251,5 +207,5 @@ export function MyAccount() {
                 </form>
             </motion.div>
         </div>
-    );
+    )
 }
