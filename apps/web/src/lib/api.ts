@@ -76,47 +76,6 @@ export async function getUserById(id: string) {
     return res.json()
 }
 
-// Recherche de restaurants par mots-clés
-export async function searchRestaurants(token: string, keywords: string) {
-    const res = await fetch("http://localhost:8080/restaurants/research", {
-        method: "POST",
-        headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            keywords,
-            page: 1,
-            limit: 10,
-        }),
-    })
-
-    if (!res.ok) {
-        throw new Error("Erreur lors de la recherche des restaurants")
-    }
-
-    return res.json()
-}
-
-export async function getRestaurants() {
-    const token = localStorage.getItem("access_token")
-
-    const res = await fetch("http://localhost:8080/restaurants/research", {
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ keywords: "", page: 1, limit: 10 }),
-    })
-
-    if (!res.ok) {
-        throw new Error("Erreur lors de la récupération des restaurants")
-    }
-
-    return res.json()
-}
-
 export async function login(email: string, password: string) {
     const res = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
@@ -134,3 +93,40 @@ export async function login(email: string, password: string) {
     console.log("Réponse login API :", data); // 👈 pour debug
     return data;
 }
+
+export async function searchRestaurants(
+    keywords: string,
+    page: number,
+    limit: number,
+    token: string
+) {
+    const res = await fetch("http://localhost:8080/restaurants/research", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ keywords, page, limit }),
+    })
+
+    if (!res.ok) {
+        throw new Error("Erreur lors de la recherche des restaurants")
+    }
+
+    return res.json()
+}
+
+export async function getMenuByRestaurantId(id: string, token: string) {
+    const res = await fetch(`http://localhost:8080/restaurants/menu?id=${id}`, {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
+    if (!res.ok) {
+        throw new Error("Impossible de récupérer le menu")
+    }
+
+    return res.json()
+}
+

@@ -1,6 +1,8 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { Search } from "lucide-react"
+import Link from "next/link"
 import { searchRestaurants } from "@/lib/api"
 
 type Restaurant = {
@@ -8,79 +10,134 @@ type Restaurant = {
     restaurant_name: string
     location: string
     keywords: string
+    siret: string
+    user_id: number
 }
 
 export default function RestaurantPage() {
-    const [token, setToken] = useState<string | null>(null)
-    const [keywords, setKeywords] = useState("")
     const [restaurants, setRestaurants] = useState<Restaurant[]>([])
-    const [loading, setLoading] = useState(false)
+    const [searchQuery, setSearchQuery] = useState("")
+    const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
-    useEffect(() => {
-        const storedToken = localStorage.getItem("access_token")
-        if (!storedToken) {
-            setError("Vous devez être connecté pour voir les restaurants.")
-        } else {
-            setToken(storedToken)
-        }
-    }, [])
+    const [page, setPage] = useState(1)
+    const [limit] = useState(6) // nombre de restos par page
+    const [hasMore, setHasMore] = useState(true)
 
-    const handleSearch = async () => {
-        if (!token || !keywords) return
-
-        setLoading(true)
-        setError(null)
-
+    const fetchRestaurants = async (keywords = "", currentPage = 1) => {
         try {
-            const result = await searchRestaurants(token, keywords)
-            setRestaurants(result)
+            const token = localStorage.getItem("access_token")
+            if (!token) {
+                setError("Vous devez être connecté.")
+                setLoading(false)
+                return
+            }
+
+            const data = await searchRestaurants(keywords, currentPage, limit, token)
+            setRestaurants(data)
+            setHasMore(data.length === limit)
         } catch (err) {
-            console.error(err)
-            setError("Erreur lors de la récupération des restaurants.")
+            console.error("Erreur fetch restaurants :", err)
+            setError("Impossible de charger les restaurants.")
         } finally {
             setLoading(false)
         }
     }
 
-    return (
-        <main className="p-10 max-w-3xl mx-auto space-y-6">
-            <h1 className="text-2xl font-bold">🔍 Recherche de restaurants</h1>
+    useEffect(() => {
+        setLoading(true)
+        fetchRestaurants("", page)
+    }, [page])
 
-            <div className="flex gap-2">
-                <input
-                    type="text"
-                    value={keywords}
-                    onChange={(e) => setKeywords(e.target.value)}
-                    placeholder="Ex: sushi, burger, pizza"
-                    className="border px-4 py-2 rounded w-full"
-                />
-                <button
-                    onClick={handleSearch}
-                    className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
-                >
-                    Rechercher
-                </button>
+    useEffect(() => {
+        const delayDebounce = setTimeout(() => {
+            setPage(1)
+            fetchRestaurants(searchQuery, 1)
+        }, 500)
+        return () => clearTimeout(delayDebounce)
+    }, [searchQuery])
+
+    return (
+        <main className="px-6 md:px-16 py-12 space-y-10">
+            {/* Barre de recherche */}
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+                <div className="relative w-full md:w-1/2">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-gray-3)]" />
+                    <input
+                        type="text"
+                        placeholder="Rechercher un restaurant..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-10 pr-4 py-3 rounded-full border border-[var(--color-gray-5)] bg-white text-[var(--color-black-1)] placeholder-[var(--color-gray-3)] shadow-sm"
+                    />
+                </div>
             </div>
 
-            {loading && <p className="text-gray-500">Chargement...</p>}
-            {error && <p className="text-red-600">{error}</p>}
+            {/* Message d’erreur */}
+            {error && <div className="text-red-600 font-semibold">{error}</div>}
 
-            {restaurants.length > 0 && (
-                <ul className="divide-y">
-                    {restaurants.map((resto) => (
-                        <li key={resto.restaurant_id} className="py-4">
-                            <h2 className="text-lg font-semibold">{resto.restaurant_name}</h2>
-                            <p className="text-sm text-gray-600">📍 {resto.location}</p>
-                            <p className="text-sm text-gray-500">🔑 {resto.keywords}</p>
-                        </li>
-                    ))}
-                </ul>
+            {/* Liste restaurants */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {loading ? (
+                    [...Array(limit)].map((_, i) => (
+                        <div key={i} className="h-56 bg-[var(--color-gray-5)] animate-pulse rounded-xl" />
+                    ))
+                ) : restaurants.length > 0 ? (
+                    restaurants.map((rest) => (
+                        <Link
+                            href={`/restaurant/${rest.restaurant_id}`}
+                            key={rest.restaurant_id}
+                            className="bg-white rounded-xl shadow hover:shadow-md transition overflow-hidden border"
+                        >
+                            <div className="h-40 w-full relative">
+                                <img
+                                    src="/placeholder.svg"
+                                    alt={rest.restaurant_name}
+                                    className="object-cover w-full h-full"
+                                />
+                            </div>
+                            <div className="p-4">
+                                <h3 className="font-bold text-[var(--color-black-1)]">{rest.restaurant_name}</h3>
+                                <p className="text-sm text-[var(--color-gray-3)]">{rest.keywords || "Type inconnu"}</p>
+                                <div className="mt-2 flex flex-wrap text-sm text-[var(--color-gray-2)] gap-2">
+                                    <span>🚚 20-30 min</span>
+                                    <span>•</span>
+                                    <span>📍 {rest.location || "non précisée"}</span>
+                                </div>
+                            </div>
+                        </Link>
+                    ))
+                ) : (
+                    <p className="text-[var(--color-gray-3)]">Aucun restaurant trouvé.</p>
+                )}
+            </div>
+
+            {/* Pagination améliorée */}
+            {!loading && restaurants.length > 0 && (
+                <div className="flex justify-center gap-4 pt-8">
+                    <button
+                        disabled={page === 1}
+                        onClick={() => setPage((prev) => Math.max(1, prev - 1))}
+                        className="min-w-[120px] px-5 py-2 rounded-full font-semibold transition
+                 bg-[var(--color-secondary)] text-white
+                 hover:brightness-110 cursor-pointer
+                 disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                        ◀ Précédent
+                    </button>
+                    <button
+                        disabled={!hasMore}
+                        onClick={() => setPage((prev) => prev + 1)}
+                        className="min-w-[120px] px-5 py-2 rounded-full font-semibold transition
+                 bg-[var(--color-secondary)] text-white
+                 hover:brightness-110 cursor-pointer
+                 disabled:opacity-40 disabled:cursor-not-allowed"
+                    >
+                        Suivant ▶
+                    </button>
+                </div>
             )}
 
-            {!loading && restaurants.length === 0 && !error && (
-                <p className="text-gray-400">Aucun restaurant à afficher pour l’instant.</p>
-            )}
         </main>
     )
 }
