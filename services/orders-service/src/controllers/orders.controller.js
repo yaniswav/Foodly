@@ -1,11 +1,11 @@
 const Order = require("../models/orders.model");
 
 /**
- * @api {get} /order Get order by ID
+ * @api {get} /orders Get orders by ID
  * @apiName GetOrderById
  * @apiGroup Orders
  * @apiParam {String} id Order ID.
- * @apiSuccess {Object} order Order details.
+ * @apiSuccess {Object} orders Order details.
  * @apiError {String} message Error message.
  */
 exports.getById = async (req, res) => {
@@ -54,11 +54,11 @@ exports.getAllByRestaurantId = async (req, res) => {
 };
 
 /**
- * @api {post} /orders Create a new order
+ * @api {post} /orders Create a new orders
  * @apiName CreateOrder
  * @apiGroup Orders
- * @apiBody {Object} order Order details.
- * @apiSuccess {Object} order Created order details.
+ * @apiBody {Object} orders Order details.
+ * @apiSuccess {Object} orders Created orders details.
  * @apiError {String} message Error message.
  */
 exports.createOrder = async (req, res) => {
@@ -72,7 +72,7 @@ exports.createOrder = async (req, res) => {
 };
 
 /**
- * @api {delete} /orders/:id Delete order by ID
+ * @api {delete} /orders/:id Delete orders by ID
  * @apiName DeleteOrderById
  * @apiGroup Orders
  * @apiParam {String} id Order ID.
@@ -89,14 +89,14 @@ exports.deleteById = async (req, res) => {
 };
 
 /**
- * @api {patch} /orders/status/:id Update order status
+ * @api {patch} /orders/status/:id Update orders status
  * @apiName UpdateOrderStatus
  * @apiGroup Orders
  * @apiParam {String} id Order ID.
  * @apiBody {String} [payment_status] Payment status.
  * @apiBody {String} [status_restorant] Restaurant status.
  * @apiBody {String} [status_delivery] Delivery status.
- * @apiSuccess {Array} order_result Updated order details.
+ * @apiSuccess {Array} order_result Updated orders details.
  * @apiError {String} message Error message.
  */
 exports.updateStatus = async (req, res) => {

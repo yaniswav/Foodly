@@ -1,9 +1,9 @@
-import { CartPage } from "@/components/cart-page";
+import { MyOrders } from "@/components/my-orders";
 
 export default function Page() {
     return (
         <main className="p-4">
-            <CartPage />
+            <MyOrders />
         </main>
     );
 }
