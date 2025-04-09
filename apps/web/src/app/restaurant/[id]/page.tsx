@@ -63,10 +63,14 @@ export default function RestaurantDetailPage() {
             {/* BANNIÈRE RESTAURANT */}
             <div className="w-full h-60 rounded-xl overflow-hidden shadow">
                 <img
-                    src={`/${restaurant.restaurant_name.replace(/\s+/g, "_")}.svg`}
+                    src={`/${restaurant.restaurant_name.replace(/\s+/g, "_")}.png`}
                     alt={restaurant.restaurant_name}
                     onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"
+                        const img = e.currentTarget as HTMLImageElement
+                        if (!img.dataset.fallback) {
+                            img.src = "/placeholder.png"
+                            img.dataset.fallback = "true"
+                        }
                     }}
                     className="w-full h-full object-cover"
                 />
@@ -89,8 +93,15 @@ export default function RestaurantDetailPage() {
                     >
                         <div className="flex items-center gap-4">
                             <img
-                                src={item.img || "/placeholder.svg"}
+                                src={`/${item.item_name.replace(/\s+/g, "_")}.png`}
                                 alt={item.item_name}
+                                onError={(e) => {
+                                    const img = e.currentTarget as HTMLImageElement
+                                    if (!img.dataset.fallback) {
+                                        img.src = "/placeholder.png"
+                                        img.dataset.fallback = "true"
+                                    }
+                                }}
                                 className="w-16 h-16 rounded-md object-cover bg-[var(--color-gray-4)]"
                             />
                             <div>

@@ -100,8 +100,15 @@ export default function RestaurantPage() {
                         >
                             <div className="h-40 w-full relative">
                                 <img
-                                    src="/placeholder.svg"
+                                    src={`/${rest.restaurant_name.replace(/\s+/g, "_")}.png`}
                                     alt={rest.restaurant_name}
+                                    onError={(e) => {
+                                        const img = e.currentTarget as HTMLImageElement
+                                        if (!img.dataset.fallback) {
+                                            img.src = "/placeholder.png"
+                                            img.dataset.fallback = "true"
+                                        }
+                                    }}
                                     className="object-cover w-full h-full"
                                 />
                             </div>
