@@ -15,38 +15,37 @@ type Restaurant = {
 }
 
 type MenuItem = {
-    item_id: number
-    name: string
-    description: string
-    price: number
-    image_url?: string
-    category: string
+    menu_item_id: number
+    item_name: string
+    price: string
+    img: string
+    restaurant_id_fk: number
 }
 
 export default function RestaurantDetailPage() {
     const { id } = useParams()
     const [restaurant, setRestaurant] = useState<Restaurant | null>(null)
-    const [menu, setMenu] = useState<MenuItem[]>([])
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        const token = localStorage.getItem("access_token")
-        if (!token) {
-            setError("Vous devez être connecté.")
-            setLoading(false)
-            return
-        }
-
         const fetchData = async () => {
+            const token = localStorage.getItem("access_token")
+            if (!token) {
+                setError("Vous devez être connecté.")
+                setLoading(false)
+                return
+            }
+
             try {
-                const r = await getRestaurantById(id as string, token)
-                const m = await getMenuByRestaurantId(id as string, token)
-                setRestaurant(r)
-                setMenu(m)
+                const restoData = await getRestaurantById(id as string, token)
+                const menuData = await getMenuByRestaurantId(id as string, token)
+                setRestaurant(restoData)
+                setMenuItems(menuData)
             } catch (err) {
-                console.error("Erreur récupération restaurant :", err)
-                setError("Impossible de récupérer les données du restaurant.")
+                console.error("Erreur de récupération :", err)
+                setError("Impossible de charger les données du restaurant.")
             } finally {
                 setLoading(false)
             }
@@ -55,79 +54,60 @@ export default function RestaurantDetailPage() {
         if (id) fetchData()
     }, [id])
 
-    const addToCart = (item: MenuItem) => {
-        const currentCart = JSON.parse(localStorage.getItem("cart") || "[]")
-        const updatedCart = [...currentCart, item]
-        localStorage.setItem("cart", JSON.stringify(updatedCart))
-        alert(`Ajouté au panier : ${item.name}`)
-    }
-
-    const menuByCategory = menu.reduce((acc: Record<string, MenuItem[]>, item) => {
-        if (!acc[item.category]) acc[item.category] = []
-        acc[item.category].push(item)
-        return acc
-    }, {})
-
     if (loading) return <div className="p-10">Chargement...</div>
     if (error) return <div className="p-10 text-red-600">{error}</div>
     if (!restaurant) return <div className="p-10">Restaurant introuvable.</div>
 
     return (
-        <main className="px-6 md:px-16 py-12 max-w-5xl mx-auto space-y-10">
-            {/* Image du restaurant */}
-            <div className="h-72 md:h-96 rounded-xl overflow-hidden shadow border bg-white">
+        <main className="px-6 md:px-16 py-10 space-y-10 bg-[var(--color-gray-6)] min-h-screen">
+            {/* BANNIÈRE RESTAURANT */}
+            <div className="w-full h-60 rounded-xl overflow-hidden shadow">
                 <img
-                    src="/placeholder.svg"
+                    src={`/${restaurant.restaurant_name.replace(/\s+/g, "_")}.svg`}
                     alt={restaurant.restaurant_name}
+                    onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/placeholder.svg"
+                    }}
                     className="w-full h-full object-cover"
                 />
             </div>
 
-            {/* Nom et localisation */}
+            {/* INFOS RESTAURANT */}
             <div className="text-center space-y-2">
-                <h1 className="text-3xl font-bold text-[var(--color-black-1)]">
-                    {restaurant.restaurant_name}
-                </h1>
-                <p className="text-[var(--color-gray-3)]">{restaurant.location || "Localisation inconnue"}</p>
+                <h1 className="text-3xl font-bold text-[var(--color-black-1)]">{restaurant.restaurant_name}</h1>
+                <p className="text-[var(--color-gray-3)] text-lg">{restaurant.location}</p>
             </div>
 
-            {/* Menu par catégories */}
-            <div className="space-y-12">
-                {Object.entries(menuByCategory).map(([category, items]) => (
-                    <section key={category} className="space-y-6">
-                        <h2 className="text-2xl font-bold text-[var(--color-black-1)] border-b pb-2">{category}</h2>
-                        <div className="space-y-4">
-                            {items.map((item) => (
-                                <div
-                                    key={item.menu_item_id}
-                                    className="flex gap-4 items-center bg-white shadow-sm border rounded-xl p-4"
-                                >
-                                    <div className="min-w-[80px] h-[80px] rounded-lg overflow-hidden">
-                                        <img
-                                            src={item.image_url || "/placeholder.svg"}
-                                            alt={item.name}
-                                            className="object-cover w-full h-full"
-                                        />
-                                    </div>
-                                    <div className="flex-1">
-                                        <h3 className="font-bold text-[var(--color-black-1)]">{item.name}</h3>
-                                        <p className="text-sm text-[var(--color-gray-3)]">{item.description}</p>
-                                        <p className="text-[var(--color-secondary)] font-semibold mt-1">
-                                            {Number(item.price || 0).toFixed(2)} €
-                                        </p>
+            {/* MENU */}
+            <div className="space-y-8">
+                <h2 className="text-2xl font-bold text-[var(--color-black-1)] border-b pb-2">Menu</h2>
 
-                                    </div>
-                                    <button
-                                        onClick={() => addToCart(item)}
-                                        className="p-2 rounded-full bg-[var(--color-secondary)] text-white hover:brightness-110 transition"
-                                        title="Ajouter au panier"
-                                    >
-                                        <ShoppingCart className="w-5 h-5" />
-                                    </button>
-                                </div>
-                            ))}
+                {menuItems.map((item) => (
+                    <div
+                        key={item.menu_item_id}
+                        className="flex items-center justify-between gap-4 bg-white shadow-sm border rounded-xl p-4"
+                    >
+                        <div className="flex items-center gap-4">
+                            <img
+                                src={item.img || "/placeholder.svg"}
+                                alt={item.item_name}
+                                className="w-16 h-16 rounded-md object-cover bg-[var(--color-gray-4)]"
+                            />
+                            <div>
+                                <h3 className="font-semibold text-[var(--color-black-1)]">{item.item_name}</h3>
+                                <p className="text-[var(--color-primary)] font-medium mt-1">
+                                    {parseFloat(item.price).toFixed(2)} €
+                                </p>
+                            </div>
                         </div>
-                    </section>
+
+                        <button
+                            className="bg-[var(--color-secondary)] text-white rounded-full p-3 hover:brightness-110 transition cursor-pointer"
+                            title="Ajouter au panier"
+                        >
+                            <ShoppingCart className="w-5 h-5" />
+                        </button>
+                    </div>
                 ))}
             </div>
         </main>

@@ -36,13 +36,22 @@ export default function RestaurantPage() {
             const data = await searchRestaurants(keywords, currentPage, limit, token)
             setRestaurants(data)
             setHasMore(data.length === limit)
+
+            // ✅ Affiche l'erreur seulement si la recherche ne retourne aucun résultat
+            if (keywords && data.length === 0) {
+                setError(``)
+            } else {
+                setError(null)
+            }
+
         } catch (err) {
             console.error("Erreur fetch restaurants :", err)
-            setError("Impossible de charger les restaurants.")
+            setError(`Aucun résultat trouvé pour : "${keywords}". Attention aux majuscules. Retrouvez ci-dessous la liste de tous les restaurants.`)
         } finally {
             setLoading(false)
         }
     }
+
 
     useEffect(() => {
         setLoading(true)
