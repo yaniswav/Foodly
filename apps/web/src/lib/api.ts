@@ -97,3 +97,40 @@ export async function searchRestaurants(token: string, keywords: string) {
 
     return res.json()
 }
+
+export async function getRestaurants() {
+    const token = localStorage.getItem("access_token")
+
+    const res = await fetch("http://localhost:8080/restaurants/research", {
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ keywords: "", page: 1, limit: 10 }),
+    })
+
+    if (!res.ok) {
+        throw new Error("Erreur lors de la récupération des restaurants")
+    }
+
+    return res.json()
+}
+
+export async function login(email: string, password: string) {
+    const res = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+        throw new Error("Erreur d'authentification");
+    }
+
+    const data = await res.json();
+    console.log("Réponse login API :", data); // 👈 pour debug
+    return data;
+}
