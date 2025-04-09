@@ -49,5 +49,5 @@ export {
     CardTitle,
     CardDescription,
     CardContent,
-    CardFooter, // 👈 AJOUTÉ ICI
+    CardFooter,
 };
