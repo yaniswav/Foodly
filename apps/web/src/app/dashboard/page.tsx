@@ -1,5 +1,10 @@
-import { DashboardHome } from "@/components/dashboard-home"
+
+import { DashboardHome } from "@/components/dashboard-home";
 
 export default function DashboardPage() {
-    return <DashboardHome />
+    return (
+        <main className="p-4">
+            <DashboardHome />
+        </main>
+    );
 }
