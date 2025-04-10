@@ -1,25 +1,18 @@
 "use client"
 
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 import clsx from "clsx"
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { Search } from "lucide-react"
-import { useState } from "react"
-import SearchOverlay from "@/components/ui/SearchOverlay"
+import {UserCircle } from "lucide-react"
+import { useAuth } from "@/context/AuthContext"
 
 export default function Header() {
     const pathname = usePathname()
-    const [isSearchOpen, setIsSearchOpen] = useState(false)
-
-    const links = [
-        { href: "/restaurant", label: "Restaurants" },
-        { href: "/cart", label: "Panier" },
-        { href: "/profile", label: "Profil" },
-        { href: "/login", label: "Connexion" },
-        { href: "/register", label: "Inscription" },
-    ]
+    const router = useRouter()
+    const { isLoggedIn } = useAuth()
 
     return (
         <header className="bg-white text-[var(--color-black-1)] shadow-md sticky top-0 z-50">
@@ -27,7 +20,7 @@ export default function Header() {
                 initial={{ y: -80 }}
                 animate={{ y: 0 }}
                 transition={{ duration: 0.5 }}
-                className="w-full px-32 py-6 flex items-center justify-between"
+                className="w-full px-6 md:px-20 py-6 flex items-center justify-between"
             >
                 {/* Logo + Foodly */}
                 <Link href="/" className="flex items-center gap-4">
@@ -39,37 +32,43 @@ export default function Header() {
                         className="object-contain"
                     />
                     <span className="text-2xl font-bold bg-gradient-to-r from-[var(--color-tertiary)] to-[var(--color-secondary)] bg-clip-text text-transparent">
-            Foodly
-          </span>
+                        Foodly
+                    </span>
                 </Link>
 
                 {/* Navigation */}
                 <nav className="hidden lg:flex items-center gap-10 text-lg font-semibold">
-                    {links.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={clsx(
-                                "hover:text-[var(--color-secondary)] transition",
-                                pathname === link.href ? "text-[var(--color-secondary)] underline" : ""
-                            )}
-                        >
-                            {link.label}
-                        </Link>
-                    ))}
+                    <Link
+                        href="/restaurant"
+                        className={clsx(
+                            "hover:text-[var(--color-secondary)] transition",
+                            pathname === "/restaurant" ? "text-[var(--color-secondary)] underline" : ""
+                        )}
+                    >
+                        Restaurants
+                    </Link>
                 </nav>
 
-                {/* Bouton recherche */}
-                <button
-                    onClick={() => setIsSearchOpen(true)}
-                    className="ml-6 p-2 rounded-full hover:bg-gray-100 transition-colors"
-                >
-                    <Search className="w-6 h-6 text-[var(--color-primary)]" />
-                </button>
-            </motion.div>
+                {/* Profil */}
+                <div className="flex items-center gap-4">
+                    <div className="relative">
+                        <button
+                            onClick={() =>
+                                router.push(isLoggedIn ? "/profile" : "/login")
+                            }
+                            title={isLoggedIn ? "Profil" : "Connexion"}
+                            className="hover:text-[var(--color-secondary)] transition cursor-pointer"
+                        >
+                            <UserCircle className="w-7 h-7 text-[var(--color-primary)]" />
+                        </button>
 
-            {/* Overlay de recherche */}
-            {isSearchOpen && <SearchOverlay onClose={() => setIsSearchOpen(false)} />}
+                        {/* Petite bulle verte si connecté */}
+                        {isLoggedIn && (
+                            <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white" />
+                        )}
+                    </div>
+                </div>
+            </motion.div>
         </header>
     )
 }

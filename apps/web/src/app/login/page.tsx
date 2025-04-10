@@ -4,6 +4,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { login } from "@/lib/api"
 import { motion } from "framer-motion"
+import { useAuth } from "@/context/AuthContext"
+
 
 export default function LoginPage() {
     const router = useRouter()
@@ -20,6 +22,8 @@ export default function LoginPage() {
         return newErrors
     }
 
+    const { login: authLogin } = useAuth()
+
     const handleLogin = async () => {
         const validationErrors = validate()
         if (Object.keys(validationErrors).length > 0) {
@@ -29,9 +33,11 @@ export default function LoginPage() {
 
         setLoading(true)
         setMessage("")
+
         try {
-            const response = await login(email, password)
+            const response = await login(email, password) // 👈 ta fonction API
             const token = response.access_token
+            const userId = response.user?.id // ⚠️ adapte si besoin (ex: response.id)
 
             if (!token) {
                 setMessage("❌ Identifiants incorrects.")
@@ -39,7 +45,9 @@ export default function LoginPage() {
                 return
             }
 
-            localStorage.setItem("access_token", token)
+            // ✅ stocke via le contexte (remplace localStorage direct)
+            authLogin(token, userId)
+
             setMessage("✅ Connexion réussie ! Redirection...")
 
             setTimeout(() => {

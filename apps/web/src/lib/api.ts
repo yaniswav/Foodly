@@ -89,10 +89,17 @@ export async function login(email: string, password: string) {
         throw new Error("Erreur d'authentification");
     }
 
-    const data = await res.json();
-    console.log("Réponse login API :", data); // 👈 pour debug
-    return data;
+    const data = await res.json()
+
+    // Stockage du token uniquement
+    localStorage.setItem("access_token", data.access_token)
+
+    console.log("✅ Données reçues :", data)
+
+    return data
 }
+
+
 
 export async function searchRestaurants(
     keywords: string,
@@ -166,5 +173,7 @@ export async function createOrder(order: any, token: string) {
     console.log("✅ Réponse backend /orders :", resText)
     return JSON.parse(resText)
 }
+
+
 
 
