@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
+import { useCart } from "@/context/CartContext"
 
 type AuthContextType = {
     isLoggedIn: boolean
@@ -18,6 +19,7 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const { clearCart } = useCart()
 
     useEffect(() => {
         const token = localStorage.getItem("access_token")
@@ -33,6 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = () => {
         localStorage.removeItem("access_token")
         localStorage.removeItem("user_id")
+        clearCart() // ✅ Vide le panier à la déconnexion
         setIsLoggedIn(false)
     }
 

@@ -7,7 +7,7 @@ export type CartItem = {
         menu_item_id: number
         item_name: string
         price: string
-        restaurant_id_fk: number // ✅ Ajouté ici !
+        restaurant_id_fk: number
     }
     quantity: number
 }
@@ -17,6 +17,7 @@ type CartContextType = {
     addToCart: (item: CartItem["item"]) => void
     removeFromCart: (id: number) => void
     updateQuantity: (id: number, delta: number) => void
+    clearCart: () => void
     total: number
 }
 
@@ -68,10 +69,15 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         )
     }
 
+    const clearCart = () => {
+        setCart([])
+        localStorage.removeItem("cart")
+    }
+
     const total = cart.reduce((sum, i) => sum + parseFloat(i.item.price) * i.quantity, 0)
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, total }}>
+        <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart, total }}>
             {children}
         </CartContext.Provider>
     )

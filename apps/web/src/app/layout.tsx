@@ -5,8 +5,8 @@ import "./globals.css"
 import Header from "@/components/ui/Header"
 import CartFloatingPanel from "@/components/CartFloatingPanel"
 
-import { AuthProvider } from "@/context/AuthContext"
 import { CartProvider } from "@/context/CartContext"
+import { AuthProvider } from "@/context/AuthContext"
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -33,13 +33,13 @@ export default function RootLayout({
         <body
             className={`${geistSans.variable} ${geistMono.variable} font-sans bg-white text-black`}
         >
-        <AuthProvider>
-            <CartProvider>
+        <CartProvider>
+            <AuthProvider>
                 <Header />
                 {children}
                 <CartFloatingPanel />
-            </CartProvider>
-        </AuthProvider>
+            </AuthProvider>
+        </CartProvider>
         </body>
         </html>
     )
