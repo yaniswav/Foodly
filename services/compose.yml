@@ -44,6 +44,14 @@ services:
     container_name: restaurants-service
     networks:
       - app-network
+  file:
+    build:
+      context: ./file-service
+    container_name: file-service
+    ports:
+      - "5003:5003"
+    env_file:
+      - ./file-service/.env
 
 networks:
   app-network:
