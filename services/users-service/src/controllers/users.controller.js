@@ -1,4 +1,5 @@
 const User = require("../models/user.model");
+const readId = require('../middlewares/readId.js');
 
 exports.register = async (req, res) => {
     var newUser = new User(req.body);
@@ -32,7 +33,7 @@ exports.register = async (req, res) => {
 }
 
 exports.getById = async (req, res) => {
-    const userId = req.query.id;
+    const userId = req.body.id || await readId(req, res);
 
     try {
         const user = await User.getById(userId);
@@ -46,7 +47,8 @@ exports.getById = async (req, res) => {
 }
 
 exports.update = async (req, res) => {
-    const userId = req.body.id;
+    const userId = req.body.id || await readId(req, res);
+
     const userData = req.body;
 
     try {

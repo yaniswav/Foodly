@@ -113,7 +113,7 @@ const requiredArgs = require('../middlewares/requiredArgs.js');
 
 module.exports = function (app) {
     app.get("/byRestaurantId", requiredArgs(["id"]), restaurantsController.getByRestaurantId);
-    app.get("/byUserId", requiredArgs(["id"]), restaurantsController.getByUserId);
+    app.get("/byUserId", restaurantsController.getByUserId);
     app.post("/research", requiredFields(["page", "limit"]), restaurantsController.getByKeywords);
     app.post("/", requiredFields(["restaurant_name", "location", "siret", "keywords", "user_id"]), restaurantsController.create);
     app.patch("", requiredFields(["id"]), restaurantsController.update);
