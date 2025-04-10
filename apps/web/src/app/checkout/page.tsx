@@ -34,7 +34,6 @@ export default function CheckoutPage() {
             const restaurant_id = cart[0]?.item.restaurant_id_fk
 
             const payload = {
-                id_i: String(Math.floor(Math.random() * 10000)),
                 user_id,
                 restaurant_id,
                 delivery_id: "null",
@@ -59,11 +58,13 @@ export default function CheckoutPage() {
                 })),
             }
 
-            await createOrder(payload, token!)
+            const res = await createOrder(payload, token!)
+            console.log("✅ Commande envoyée avec succès :", res)
+
             setMessage("✅ Commande enregistrée ! Redirection...")
             setTimeout(() => router.push("/"), 2000)
         } catch (err) {
-            console.error(err)
+            console.error("❌ Erreur création commande :", err)
             setMessage("❌ Une erreur est survenue.")
         } finally {
             setLoading(false)
@@ -162,17 +163,17 @@ export default function CheckoutPage() {
                     💳 Mode de paiement
                 </h2>
 
-                <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row gap-4">
                     {paymentMethods.map((method) => (
                         <label
                             key={method.value}
-                            className={`w-full flex justify-between items-center px-5 py-4 border rounded-lg text-base font-medium cursor-pointer transition ${
+                            className={`flex-1 flex justify-between items-center px-5 py-4 rounded-lg text-base font-medium cursor-pointer transition border-2 ${
                                 paymentMethod === method.value
-                                    ? "bg-[var(--color-secondary)] text-white border-[var(--color-secondary)]"
-                                    : "text-[var(--color-black-2)] border-gray-300 hover:border-[var(--color-secondary)] hover:text-[var(--color-secondary)]"
+                                    ? "border-[var(--color-secondary)]"
+                                    : "border-gray-300 hover:border-[var(--color-secondary)]"
                             }`}
                         >
-                            <div className="flex items-center gap-3">
+                            <div className="flex items-center gap-3 text-[var(--color-black-1)]">
                                 {method.value === "card" ? (
                                     <CreditCard className="w-5 h-5" />
                                 ) : (

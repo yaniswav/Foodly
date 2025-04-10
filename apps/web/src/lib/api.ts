@@ -174,6 +174,41 @@ export async function createOrder(order: any, token: string) {
     return JSON.parse(resText)
 }
 
+export async function getCurrentUser(token: string) {
+    const res = await fetch("http://localhost:8080/users", {
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
+    if (!res.ok) {
+        const text = await res.text()
+        console.error("Erreur getCurrentUser:", text)
+        throw new Error("Erreur lors du chargement du profil")
+    }
+
+    return res.json()
+}
+
+export async function updateCurrentUser(data: any, token: string) {
+    const res = await fetch("http://localhost:8080/users", {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+    })
+
+    if (!res.ok) {
+        const text = await res.text()
+        console.error("Erreur updateCurrentUser:", text)
+        throw new Error("Erreur lors de la mise à jour du profil")
+    }
+
+    return res.json()
+}
+
 
 
 
