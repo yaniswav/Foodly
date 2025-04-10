@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { useParams } from "next/navigation"
 import { getRestaurantById, getMenuByRestaurantId } from "@/lib/api"
+import { useCart } from "@/context/CartContext"
 import { ShoppingCart } from "lucide-react"
 
 type Restaurant = {
@@ -28,6 +29,8 @@ export default function RestaurantDetailPage() {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+
+    const { addToCart } = useCart()
 
     useEffect(() => {
         const fetchData = async () => {
@@ -60,7 +63,7 @@ export default function RestaurantDetailPage() {
 
     return (
         <main className="px-6 md:px-16 py-10 space-y-10 bg-[var(--color-gray-6)] min-h-screen">
-            {/* BANNIÈRE RESTAURANT */}
+            {/* BANNIÈRE */}
             <div className="w-full h-60 rounded-xl overflow-hidden shadow">
                 <img
                     src={`/${restaurant.restaurant_name.replace(/\s+/g, "_")}.png`}
@@ -76,7 +79,7 @@ export default function RestaurantDetailPage() {
                 />
             </div>
 
-            {/* INFOS RESTAURANT */}
+            {/* INFOS */}
             <div className="text-center space-y-2">
                 <h1 className="text-3xl font-bold text-[var(--color-black-1)]">{restaurant.restaurant_name}</h1>
                 <p className="text-[var(--color-gray-3)] text-lg">{restaurant.location}</p>
@@ -113,6 +116,13 @@ export default function RestaurantDetailPage() {
                         </div>
 
                         <button
+                            onClick={() =>
+                                addToCart({
+                                    menu_item_id: item.menu_item_id,
+                                    item_name: item.item_name,
+                                    price: item.price,
+                                })
+                            }
                             className="bg-[var(--color-secondary)] text-white rounded-full p-3 hover:brightness-110 transition cursor-pointer"
                             title="Ajouter au panier"
                         >
