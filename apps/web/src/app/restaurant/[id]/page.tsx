@@ -121,6 +121,7 @@ export default function RestaurantDetailPage() {
                                     menu_item_id: item.menu_item_id,
                                     item_name: item.item_name,
                                     price: item.price,
+                                    restaurant_id_fk: item.restaurant_id_fk,
                                 })
                             }
                             className="bg-[var(--color-secondary)] text-white rounded-full p-3 hover:brightness-110 transition cursor-pointer"
