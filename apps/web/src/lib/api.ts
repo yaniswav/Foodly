@@ -146,4 +146,25 @@ export async function registerUser(formData: any) {
     return response.json()
 }
 
+export async function createOrder(order: any, token: string) {
+    const response = await fetch("http://localhost:8080/orders/order", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(order),
+    })
+
+    const resText = await response.text()
+
+    if (!response.ok) {
+        console.error("❌ Backend error /orders/order :", resText)
+        throw new Error("Erreur lors de la commande")
+    }
+
+    console.log("✅ Réponse backend /orders :", resText)
+    return JSON.parse(resText)
+}
+
 

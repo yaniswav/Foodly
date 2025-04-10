@@ -49,7 +49,7 @@ export default function HeroSection() {
 
                 <div className="flex flex-col sm:flex-row gap-4">
                     <Link href="/restaurant">
-                        <button className="px-6 py-3 rounded-full font-medium border transition-colors"
+                        <button className="px-6 py-3 rounded-full font-medium border transition-colors cursor-pointer"
                                 style={{
                                     backgroundColor: "rgba(255, 255, 255, 0.15)",
                                     borderColor: "var(--color-white)",
