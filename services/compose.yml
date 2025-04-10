@@ -14,6 +14,7 @@ services:
       - logs
       - users
       - restaurants
+      - file
 
   auth:
     build: auth-service
@@ -52,7 +53,8 @@ services:
       - "5003:5003"
     env_file:
       - ./file-service/.env
-
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge
