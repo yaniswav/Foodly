@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* ✒️ Font family */
+  --font-sans: "SF Pro", system-ui, sans-serif;
+
+  /* 🎨 Brand Colors */
+  --color-primary: #4C3F53;
+  --color-secondary: #FA8723;
+  --color-tertiary: #7F1535;
+
+  /* 🟦 State Colors */
+  --color-info: #2F80ED;
+  --color-success: #27AE60;
+  --color-warning: #E2B93B;
+  --color-error: #EB5757;
+
+  /* ⚫ Black / ⚪ White / 🔘 Grays */
+  --color-black-1: #000000;
+  --color-black-2: #1D1D1D;
+  --color-black-3: #282828;
+
+  --color-gray-1: #333333;
+  --color-gray-2: #4F4F4F;
+  --color-gray-3: #828282;
+  --color-gray-4: #BDBDBD;
+  --color-gray-5: #E0E0E0;
+
+  --color-white: #FFFFFF;
+
+  /* 🔠 Headings */
+  --heading-1: 56px;
+  --heading-2: 48px;
+  --heading-3: 40px;
+  --heading-4: 32px;
+  --heading-5: 24px;
+  --heading-6: 20px;
+
+  --lh-heading-1: 61.6px;
+  --lh-heading-2: 52.8px;
+  --lh-heading-3: 44px;
+  --lh-heading-4: 35.2px;
+  --lh-heading-5: 26.4px;
+  --lh-heading-6: 22px;
+
+  /* 📄 Text body */
+  --text-lg: 20px;
+  --text-md: 18px;
+  --text-base: 16px;
+  --text-sm: 14px;
+
+  --lh-lg: 28px;
+  --lh-md: 25.2px;
+  --lh-base: 22.4px;
+  --lh-sm: 19.6px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+/* 🔧 Global styles */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-white);
+  color: var(--color-black-1);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--lh-base);
 }
+
+html {
+  overflow-y: scroll;
+}
+
+

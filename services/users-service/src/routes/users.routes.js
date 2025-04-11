@@ -4,6 +4,6 @@ const requiredArgs = require('../middlewares/requiredArgs.js');
 
 module.exports = function (app) {
     app.post("/register", requiredFields(["firstname", "lastname", "email", "password", "role"]), logsController.register);
-    app.patch("", requiredFields(["id"]), logsController.update);
-    app.get("", requiredArgs(["id"]), logsController.getById);
+    app.patch("", logsController.update);
+    app.get("", logsController.getById);
 };

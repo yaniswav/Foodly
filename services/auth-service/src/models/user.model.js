@@ -4,10 +4,12 @@ const bcrypt = require('bcrypt');
 class User {
 	email = null;
 	role = null;
+	id = 42;
 
-	constructor(email, role) {
+	constructor(email, role, id) {
 		this.email = email;
 		this.role = role;
+		this.id = id;
 	}
 
 	static async login(email, password) {
@@ -21,7 +23,7 @@ class User {
 					return false;
 				}
 				else {
-					return new User(user.email, user.role);
+					return new User(user.email, user.role, user.user_id);
 				}
 			} else {
 				return false;

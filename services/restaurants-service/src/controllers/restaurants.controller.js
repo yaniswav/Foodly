@@ -1,4 +1,5 @@
 const Restaurant = require("../models/restaurants.model");
+const readId = require('../middlewares/readId.js');
 
 exports.getByRestaurantId = async (req, res) => {
     try {
@@ -10,14 +11,18 @@ exports.getByRestaurantId = async (req, res) => {
 }
 
 exports.getByUserId = async (req, res) => {
-    try {
-        const restaurants = await Restaurant.getByUserId(req.query.id);
-        if (restaurants.length === 0) {
-            return res.status(404).json({ message: "No restaurants found for this user" });
+    const userId = req.body.id || await readId(req, res);
+
+    if (userId) {
+        try {
+            const restaurants = await Restaurant.getByUserId(userId);
+            if (restaurants.length === 0) {
+                return res.status(404).json({ message: "No restaurants found for this user" });
+            }
+            res.status(200).json(restaurants);
+        } catch (error) {
+            res.status(500).json({ message: "Server error", error: error.message });
         }
-        res.status(200).json(restaurants);
-    } catch (error) {
-        res.status(500).json({ message: "Server error", error: error.message });
     }
 }
 

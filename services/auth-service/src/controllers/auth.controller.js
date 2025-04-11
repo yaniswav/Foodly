@@ -32,8 +32,8 @@ exports.login = async (req, res) => {
 	const user = await User.login(email, password);
 
 	if (user) {
-		const accessToken = jwt.sign({ email: user.email, role: user.role, exp: Math.floor(Date.now() / 1000) + 60 * 120 }, process.env.ACCESS_JWT_KEY);
-		const refreshToken = jwt.sign({ email: user.email, role: user.role, exp: Math.floor(Date.now() / 1000) + 60 * 240 }, process.env.REFRESH_JWT_KEY);
+		const accessToken = jwt.sign({ email: user.email, id: user.id, role: user.role, exp: Math.floor(Date.now() / 1000) + 60 * 120 }, process.env.ACCESS_JWT_KEY);
+		const refreshToken = jwt.sign({ email: user.email, id: user.id, role: user.role, exp: Math.floor(Date.now() / 1000) + 60 * 360 }, process.env.REFRESH_JWT_KEY);
 
 		res.cookie('access_token', accessToken, {
 			httpOnly: true,
@@ -48,7 +48,7 @@ exports.login = async (req, res) => {
 			path: '/token'
 		});
 
-		return res.status(200).json({ "user": user, "access_tocken": accessToken, "access_token_expiresIn": Math.floor(Date.now() / 1000) + 120, "refresh_token_expiresIn": Math.floor(Date.now() / 1000) + 360 });
+		return res.status(200).json({ "user": user, "access_token": accessToken, "access_token_expiresIn": Math.floor(Date.now() / 1000) + 120, "refresh_token_expiresIn": Math.floor(Date.now() / 1000) + 360 });
 	} else {
 		return res.status(401).json({ message: "Invalid credentials" });
 	}
