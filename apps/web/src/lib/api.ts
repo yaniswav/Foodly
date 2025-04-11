@@ -175,7 +175,7 @@ export async function createOrder(order: any, token: string) {
 }
 
 export async function getCurrentUser(token: string) {
-    const res = await fetch("http://localhost:8080/users", {
+    const res = await fetch("http://localhost:8080/users/", {
         headers: {
             Authorization: `Bearer ${token}`,
         },
@@ -191,7 +191,7 @@ export async function getCurrentUser(token: string) {
 }
 
 export async function updateCurrentUser(data: any, token: string) {
-    const res = await fetch("http://localhost:8080/users", {
+    const res = await fetch("http://localhost:8080/users/", {
         method: "PATCH",
         headers: {
             "Content-Type": "application/json",

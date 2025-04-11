@@ -38,6 +38,10 @@ export default function ProfilePage() {
         try {
             await updateCurrentUser({ firstname, lastname, email }, token!)
             setMessage("✅ Profil mis à jour avec succès")
+
+            setTimeout(() => {
+                router.push("/")
+            }, 1500)
         } catch (err) {
             console.error(err)
             setMessage("❌ Une erreur est survenue.")
@@ -65,11 +69,8 @@ export default function ProfilePage() {
                 </h1>
 
                 <form onSubmit={handleUpdate} className="space-y-5">
-                    {/* Prénom */}
                     <div>
-                        <label className="block mb-1 font-medium text-[var(--color-black-1)]">
-                            Prénom
-                        </label>
+                        <label className="block mb-1 font-medium text-[var(--color-black-1)]">Prénom</label>
                         <div className="relative">
                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-gray-3)]" />
                             <input
@@ -81,11 +82,8 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Nom */}
                     <div>
-                        <label className="block mb-1 font-medium text-[var(--color-black-1)]">
-                            Nom
-                        </label>
+                        <label className="block mb-1 font-medium text-[var(--color-black-1)]">Nom</label>
                         <div className="relative">
                             <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-gray-3)]" />
                             <input
@@ -97,11 +95,8 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Email */}
                     <div>
-                        <label className="block mb-1 font-medium text-[var(--color-black-1)]">
-                            Email
-                        </label>
+                        <label className="block mb-1 font-medium text-[var(--color-black-1)]">Email</label>
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--color-gray-3)]" />
                             <input
@@ -114,7 +109,6 @@ export default function ProfilePage() {
                         </div>
                     </div>
 
-                    {/* Sauvegarder */}
                     <button
                         type="submit"
                         className="w-full flex items-center justify-center gap-2 bg-[var(--color-secondary)] text-white font-semibold py-3 rounded-full hover:brightness-110 transition cursor-pointer"
@@ -124,7 +118,6 @@ export default function ProfilePage() {
                     </button>
                 </form>
 
-                {/* Message */}
                 {message && (
                     <p className="text-center mt-2 text-sm font-medium text-[var(--color-black-2)]">
                         {message}
@@ -133,7 +126,6 @@ export default function ProfilePage() {
 
                 <hr className="my-6" />
 
-                {/* Déconnexion */}
                 <button
                     onClick={handleLogout}
                     className="w-full flex items-center justify-center gap-2 bg-[var(--color-gray-4)] text-black font-semibold py-3 rounded-full hover:brightness-95 transition cursor-pointer"
