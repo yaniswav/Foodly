@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import clsx from "clsx"
 import { motion } from "framer-motion"
 import Image from "next/image"
@@ -43,8 +43,9 @@ export default function Header() {
                     </span>
                 </Link>
 
-                {/* Navigation centralisée */}
+                {/* Navigation centrale */}
                 <nav className="flex-1 flex justify-center gap-8 text-[var(--color-black-1)] font-medium text-base">
+                    {/* Lien Restaurants */}
                     <Link
                         href="/restaurant"
                         className={clsx(
@@ -56,17 +57,16 @@ export default function Header() {
                         Restaurants
                     </Link>
 
-                    <Link
-                        href="/#"
-                        className={clsx(
-                            "flex items-center gap-2 hover:text-[var(--color-secondary)] transition",
-                            pathname === "/#" ? "text-[var(--color-secondary)] underline" : ""
-                        )}
+                    {/* Bouton Parrainer (pas de redirection) */}
+                    <button
+                        onClick={() => {}}
+                        className="flex items-center gap-2 hover:text-[var(--color-secondary)] transition cursor-pointer"
                     >
                         <Gift className="w-4 h-4" />
                         Parrainer un ami
-                    </Link>
+                    </button>
 
+                    {/* Lien Checkout */}
                     <Link
                         href="/checkout"
                         className={clsx(
@@ -79,7 +79,7 @@ export default function Header() {
                     </Link>
                 </nav>
 
-                {/* Actions à droite */}
+                {/* Recherche + Profil */}
                 <div className="flex items-center gap-4 w-full lg:w-auto">
                     {/* Barre de recherche */}
                     <div className="relative flex-1 lg:flex-none">
@@ -93,19 +93,16 @@ export default function Header() {
                         />
                     </div>
 
-                    {/* Profil */}
+                    {/* Icone Profil */}
                     <div className="relative">
                         <button
-                            onClick={() =>
-                                router.push(isLoggedIn ? "/profile" : "/login")
-                            }
+                            onClick={() => router.push(isLoggedIn ? "/profile" : "/login")}
                             title={isLoggedIn ? "Profil" : "Connexion"}
                             className="hover:text-[var(--color-secondary)] transition cursor-pointer"
                         >
                             <UserCircle className="w-7 h-7 text-[var(--color-primary)]" />
                         </button>
 
-                        {/* Bulle de connexion */}
                         {isLoggedIn && (
                             <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full ring-2 ring-white" />
                         )}
