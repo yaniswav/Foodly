@@ -63,12 +63,10 @@ class User {
 
     async update(userId, data) {
         try {
-            const fields = Object.keys(data).slice(1);
-            const values = Object.values(data).slice(1);
-            const setClause = fields.map((field, index) => `${field} = $${index + 1}`).join(', ');
-
-            const query = `UPDATE users SET ${setClause} WHERE user_id = $${fields.length + 1} RETURNING *`;
-            values.push(userId);
+            const fields = Object.keys(data).map((key, index) => `${key} = $${index + 1}`).join(', ');
+            const values = Object.values(data);
+            values.push(userId); // Add userId to the end of the values array
+            const query = `UPDATE users SET ${fields} WHERE user_id = $${values.length} RETURNING *`;
             
             const res = await client.query(query, values);
             if (res.rows.length === 0) {
